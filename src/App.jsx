@@ -172,7 +172,7 @@ function Home() {
 
   const [featuredProducts, setFeaturedProducts] = useState(() => {
     try {
-      const cached = localStorage.getItem('dharani_featured_cache');
+      const cached = localStorage.getItem('dharani_featured_cache_v8');
       if (cached) {
         const parsed = JSON.parse(cached);
         if (Array.isArray(parsed)) {
@@ -244,7 +244,7 @@ function Home() {
             };
         });
         setFeaturedProducts(mappedData);
-        try { localStorage.setItem('dharani_featured_cache', JSON.stringify(mappedData)); } catch(e) {}
+        try { localStorage.setItem('dharani_featured_cache_v8', JSON.stringify(mappedData)); } catch(e) {}
       })
       .catch(err => {
         if (err.name === 'AbortError') return;

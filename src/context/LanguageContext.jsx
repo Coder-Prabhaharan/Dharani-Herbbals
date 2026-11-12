@@ -35,6 +35,7 @@ const UI_TRANSLATIONS = {
     itemInCollection: "product in this collection",
     account: "Account",
     myAccount: "My Account",
+    wishlist: "Wishlist",
     logout: "Log Out",
     login: "Log In",
     copyright: "Dharani Herbbals",
@@ -227,6 +228,7 @@ const UI_TRANSLATIONS = {
     itemInCollection: "தயாரிப்பு உள்ளது",
     account: "கணக்கு",
     myAccount: "எனது கணக்கு",
+    wishlist: "விருப்பப்பட்டியல்",
     logout: "வெளியேறு",
     login: "உள்நுழை",
     copyright: "தரணி ஹெர்பல்ஸ்",
@@ -391,6 +393,85 @@ const UI_TRANSLATIONS = {
     contactFollowDesc: "சமீபத்திய புதுப்பிப்புகள், சுகாதார குறிப்புகள் மற்றும் தயாரிப்பு வெளியீடுகளுக்கு சமூக ஊடகங்களில் எங்களுடன் இணைந்திருங்கள்.",
   }
 };
+
+export const CATEGORY_TRANSLATIONS = {
+  ta: {
+    'all': 'அனைத்து தயாரிப்புகள்',
+    'all products': 'அனைத்து தயாரிப்புகள்',
+    'baby': 'குழந்தை பராமரிப்பு',
+    'beverages': 'மூலிகை பானங்கள்',
+    'body': 'உடல் பராமரிப்பு',
+    'food': 'பாரம்பரிய உணவு',
+    'hair': 'கூந்தல் பராமரிப்பு',
+    'health & wellness': 'சுகாதாரம் & ஆரோக்கியம்',
+    'health': 'சுகாதாரம் & ஆரோக்கியம்',
+    'poojas': 'பூஜை பொருட்கள்',
+    'skin': 'சரும பராமரிப்பு',
+  },
+  en: {
+    'all': 'All Products',
+    'all products': 'All Products',
+    'baby': 'Baby',
+    'beverages': 'Beverages',
+    'body': 'Body',
+    'food': 'Food',
+    'hair': 'Hair',
+    'health & wellness': 'Health & Wellness',
+    'health': 'Health & Wellness',
+    'poojas': 'Poojas',
+    'skin': 'Skin',
+  }
+};
+
+export const BRAND_TRANSLATIONS = {
+  ta: {
+    'makil': 'மகிழ்',
+    'mahil': 'மகிழ்',
+    'ramcare': 'ராம்கேர்',
+    'vedan': 'வேடன்',
+    'vedan ': 'வேடன்',
+    'vedanamuthu': 'வேதனமுத்து',
+    'amuthu': 'அமுது',
+    'amutham': 'அமுதம்',
+    'divyam': 'திவ்யம்',
+    'vana arasi': 'வன அரசி',
+    'vanaarasi': 'வன அரசி',
+    'dharani': 'தரணி',
+    'dharani herbbals': 'தரணி ஹெர்பல்ஸ்',
+  },
+  en: {
+    'makil': 'MAKIL',
+    'mahil': 'Mahil',
+    'ramcare': 'Ramcare',
+    'vedan': 'Vedan',
+    'vedan ': 'Vedan',
+    'vedanamuthu': 'Vedanamuthu',
+    'amuthu': 'Amuthu',
+    'amutham': 'Amutham',
+    'divyam': 'Divyam',
+    'vana arasi': 'Vana Arasi',
+    'dharani': 'Dharani',
+    'dharani herbbals': 'Dharani Herbbals',
+  }
+};
+
+export function getCategoryDisplayName(categoryName, language = 'en') {
+  if (!categoryName) return '';
+  const key = String(categoryName).trim().toLowerCase();
+  if (language === 'ta') {
+    return CATEGORY_TRANSLATIONS.ta[key] || CATEGORY_TRANSLATIONS.ta[key.replace('&', 'and')] || categoryName;
+  }
+  return CATEGORY_TRANSLATIONS.en[key] || categoryName;
+}
+
+export function getBrandDisplayName(brandName, language = 'en') {
+  if (!brandName) return '';
+  const key = String(brandName).trim().toLowerCase();
+  if (language === 'ta') {
+    return BRAND_TRANSLATIONS.ta[key] || brandName;
+  }
+  return BRAND_TRANSLATIONS.en[key] || brandName;
+}
 
 export function LanguageProvider({ children }) {
   const [language, setLanguageState] = useState(() => {
@@ -565,7 +646,27 @@ export function LanguageProvider({ children }) {
   }, [bulkProductNames, fetchBulkProductTranslations]);
 
   const t = useCallback((key) => {
-    return UI_TRANSLATIONS[language]?.[key] || UI_TRANSLATIONS['en']?.[key] || key;
+    if (!key) return '';
+    // 1. Direct translation key
+    const direct = UI_TRANSLATIONS[language]?.[key] || UI_TRANSLATIONS['en']?.[key];
+    if (direct) return direct;
+
+    // 2. Case-insensitive key lookup (e.g. 'Wishlist' vs 'wishlist')
+    const lowerKey = String(key).trim().toLowerCase();
+    for (const [k, val] of Object.entries(UI_TRANSLATIONS[language] || {})) {
+      if (k.toLowerCase() === lowerKey) return val;
+    }
+
+    // 3. Category Name lookup
+    if (language === 'ta') {
+      const cat = CATEGORY_TRANSLATIONS.ta[lowerKey] || CATEGORY_TRANSLATIONS.ta[lowerKey.replace('&', 'and')];
+      if (cat) return cat;
+
+      const brand = BRAND_TRANSLATIONS.ta[lowerKey];
+      if (brand) return brand;
+    }
+
+    return key;
   }, [language]);
 
   // Auto-fetch bulk translations on mount if language is already Tamil
@@ -582,6 +683,8 @@ export function LanguageProvider({ children }) {
         language,
         setLanguage,
         t,
+        getCategoryDisplayName: (cat) => getCategoryDisplayName(cat, language),
+        getBrandDisplayName: (brand) => getBrandDisplayName(brand, language),
         translateText,
         translateProduct,
         fetchBulkProductTranslations,

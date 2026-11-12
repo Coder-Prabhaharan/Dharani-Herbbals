@@ -55,7 +55,7 @@ export default function Profile() {
   const { products, refreshProducts } = useProducts();
   const { addToCart, refreshCart, cartItems } = useCart();
   const { wishlist, removeFromWishlist } = useWishlist();
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
   const { openLoginModal } = useAuthModal();
   const navigate = useNavigate();
 
@@ -616,11 +616,11 @@ export default function Profile() {
             <button
               className={`saas-nav-item ${activeTab === 'wishlist' ? 'active' : ''}`}
               onClick={() => setActiveTab('wishlist')}
-              title="Wishlist"
-              aria-label="Wishlist"
+              title={t('wishlist')}
+              aria-label={t('wishlist')}
             >
               <Heart size={18} />
-              <span>Wishlist</span>
+              <span>{t('wishlist')}</span>
             </button>
             <button
               className={`saas-nav-item ${activeTab === 'calendar' ? 'active' : ''}`}

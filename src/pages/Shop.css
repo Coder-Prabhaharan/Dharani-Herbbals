@@ -1042,7 +1042,7 @@
 
 @media (max-width: 768px) {
   .shop-filter-bar {
-    margin-top: 18px;
+    margin-top: 26px;
     margin-bottom: 20px;
     padding: 10px 14px;
     border-radius: 18px;
@@ -1053,8 +1053,8 @@
   }
 
   .shop-filter-left {
-    background: #f8fafc;
-    border: 1.5px solid #e2e8f0;
+    background: #f0fdf4;
+    border: 1.5px solid #16a34a;
     border-radius: 50px;
     padding: 8px 14px;
     font-size: 0.84rem;
@@ -1071,7 +1071,8 @@
   .shop-filter-label {
     font-size: 0.74rem;
     font-weight: 700;
-    color: #1e293b;
+    color: #15803d;
+    font-weight: 800;
     letter-spacing: 0.4px;
   }
 }

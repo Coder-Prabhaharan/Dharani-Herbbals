@@ -399,7 +399,7 @@ export default function Navbar() {
                         <Package size={15} /> My Orders
                       </button>
                       <button className="nav-account-item" onClick={() => { navigate('/profile', { state: { activeTab: 'wishlist' } }); setShowAccountMenu(false); }}>
-                        <Heart size={15} /> Wishlist
+                        <Heart size={15} /> {t('wishlist')}
                       </button>
                       <button className="nav-account-item" onClick={() => { navigate('/shop'); setShowAccountMenu(false); }}>
                         <RefreshCw size={15} /> Buy Again
@@ -526,7 +526,7 @@ export default function Navbar() {
                 <span className="mobile-wishlist-badge">{wishlistCount}</span>
               )}
             </div>
-            <span>Wishlist</span>
+            <span>{t('wishlist')}</span>
           </NavLink>
         </div>
         

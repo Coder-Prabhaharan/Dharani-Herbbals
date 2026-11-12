@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Leaf, Star, ShoppingBag, Heart } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
-import { useLanguage } from '../context/LanguageContext';
+import { useLanguage, getCategoryDisplayName } from '../context/LanguageContext';
 import { resolveMediaUrl } from '../services/api';
 import { formatProductPackSize, formatProductDisplayName, formatCurrency, getProductFallbackImage } from '../utils/productFormatters';
 import { getVerifiedReviewData } from '../utils/productReviews';
@@ -57,10 +57,21 @@ export const ProductCard = memo(({ product, index = 0 }) => {
   };
 
   let displayImage = '';
-  if (product.image && typeof product.image === 'string' && !product.image.includes('Vaishnavi.jpeg') && !product.image.endsWith('/logo.png')) {
+  // 1. Extra images (CRM uploaded product photos)
+  if (Array.isArray(product.extra_images) && product.extra_images.length > 0) {
+    const validExtra = product.extra_images.find(img => typeof img === 'string' && img.trim() && !img.includes('Vaishnavi.jpeg') && !img.endsWith('/logo.png'));
+    if (validExtra) {
+      displayImage = resolveMediaUrl(validExtra);
+    }
+  }
+
+  // 2. Primary product image
+  if (!displayImage && product.image && typeof product.image === 'string' && !product.image.includes('Vaishnavi.jpeg') && !product.image.endsWith('/logo.png')) {
     const firstImg = product.image.includes(',') ? product.image.split(',')[0].trim() : product.image.trim();
     displayImage = resolveMediaUrl(firstImg);
   }
+
+  // 3. Fallback
   if (!displayImage) {
     displayImage = fallbackImg || 'https://vedanmart.com/images/Food/WILD%20HONEYJAR(NR).jpg';
   }
@@ -196,7 +207,7 @@ export const ProductCard = memo(({ product, index = 0 }) => {
       <div className="uc-info-section">
         <div className="uc-category-tag">
           <Leaf size={12} className="uc-tag-icon" />
-          <span>{product.category_name || 'Snacks'}</span>
+          <span>{language === 'ta' ? (getCategoryDisplayName(product.category_name, 'ta') || product.category_name) : (product.category_name || 'Herbal Care')}</span>
         </div>
 
         <h3 className="uc-title">
@@ -246,7 +257,7 @@ export const ProductCard = memo(({ product, index = 0 }) => {
           aria-label={t('addToCart')}
         >
           <ShoppingBag size={14} className="uc-btn-icon" />
-          Add to Cart
+          {t('addToCart')}
         </button>
       </div>
 

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useSearchParams } from 'react-router-dom';
 import { ChevronRight, Sparkles } from 'lucide-react';
-import { useLanguage } from '../context/LanguageContext';
+import { useLanguage, getCategoryDisplayName } from '../context/LanguageContext';
 import { API_BASE_URL, resolveMediaUrl } from '../services/api';
 import './CategoryStrip.css';
 
@@ -123,9 +123,9 @@ export default function CategoryStrip() {
   return (
     <section className="category-strip-container" id="categories" aria-label="Product Categories">
       <div className="category-strip-header">
-        <span className="category-strip-eyebrow">✦ AYURVEDIC WELLNESS CATEGORIES ✦</span>
-        <h2 className="category-strip-title">Curated Herbal Formulations</h2>
-        <p className="category-strip-subtitle">Discover handcrafted South Indian botanical solutions, time-tested for purity and potency.</p>
+        <span className="category-strip-eyebrow">{language === 'ta' ? '✦ ஆயுர்வேத ஆரோக்கிய பிரிவுகள் ✦' : '✦ AYURVEDIC WELLNESS CATEGORIES ✦'}</span>
+        <h2 className="category-strip-title">{language === 'ta' ? 'தேர்ந்தெடுக்கப்பட்ட மூலிகை தயாரிப்புகள்' : 'Curated Herbal Formulations'}</h2>
+        <p className="category-strip-subtitle">{language === 'ta' ? 'தூய்மை மற்றும் வீரியத்திற்காக காலம் சோதித்த பாரம்பரிய தென்னிந்திய மூலிகை தீர்வுகள்.' : 'Discover handcrafted South Indian botanical solutions, time-tested for purity and potency.'}</p>
       </div>
       <div className="category-strip-scroll">
 
@@ -164,7 +164,7 @@ export default function CategoryStrip() {
                 />
               </div>
               <div className="category-btn">
-                <span>{category.name} &gt;</span>
+                <span>{(language === 'ta' ? getCategoryDisplayName(category.name, 'ta') : category.name)} &gt;</span>
               </div>
             </Link>
           );

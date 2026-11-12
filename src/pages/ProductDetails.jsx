@@ -7,7 +7,7 @@ import imgIngredients from '../assets/herbal_ingredients.webp';
 import imgTexture from '../assets/herbal_texture.webp';
 import { useCart } from '../context/CartContext';
 import { useProducts } from '../context/ProductsContext';
-import { useLanguage } from '../context/LanguageContext';
+import { useLanguage, getCategoryDisplayName, getBrandDisplayName } from '../context/LanguageContext';
 import { API_BASE_URL, resolveMediaUrl } from '../services/api';
 import { formatProductPackSize, formatVariationLabel, formatProductDisplayName, formatCurrency, getProductFallbackImage } from '../utils/productFormatters';
 import { getDefaultVariation } from '../data/productVariationsData';
@@ -941,7 +941,9 @@ export default function ProductDetails() {
           <span className="separator">/</span>
           {product.category_name && (
             <>
-              <Link to={`/shop?category=${encodeURIComponent(product.category_name)}`}>{product.category_name}</Link>
+              <Link to={`/shop?category=${encodeURIComponent(product.category_name)}`}>
+                {language === 'ta' ? getCategoryDisplayName(product.category_name, 'ta') : product.category_name}
+              </Link>
               <span className="separator">/</span>
             </>
           )}
@@ -954,10 +956,12 @@ export default function ProductDetails() {
         <div className="pd-nike-mobile-header">
           <div className="pd-nike-brand-cat-row">
             {product.brand && (
-              <span className="pd-nike-brand-pill">{product.brand}</span>
+              <span className="pd-nike-brand-pill">
+                {language === 'ta' ? getBrandDisplayName(product.brand, 'ta') : product.brand}
+              </span>
             )}
             <span className="pd-nike-category">
-              {product.category_name || 'Herbal Care'} • 100% Botanical
+              {(language === 'ta' ? getCategoryDisplayName(product.category_name, 'ta') : product.category_name) || (language === 'ta' ? 'மூலிகை பராமரிப்பு' : 'Herbal Care')} • {language === 'ta' ? '100% மூலிகை' : '100% Botanical'}
             </span>
           </div>
           <h1 className="pd-nike-mobile-title">{translatedName}</h1>
@@ -1097,7 +1101,7 @@ export default function ProductDetails() {
           {/* Subtitle & Title */}
           <div className="pd-nike-header-block">
             <span className="pd-nike-category">
-              {product.category_name || 'Herbal Care'} • 100% Botanical
+              {(language === 'ta' ? getCategoryDisplayName(product.category_name, 'ta') : product.category_name) || (language === 'ta' ? 'மூலிகை பராமரிப்பு' : 'Herbal Care')} • {language === 'ta' ? '100% மூலிகை' : '100% Botanical'}
             </span>
             <h1 className="pd-nike-title">{translatedName}</h1>
             {hasValidReviews ? (

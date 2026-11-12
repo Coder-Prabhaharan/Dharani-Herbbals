@@ -437,8 +437,9 @@
 /* Responsive */
 @media (max-width: 800px) {
   .login-modal-overlay {
-    padding: 0;
-    align-items: flex-end;
+    padding: 14px;
+    align-items: center;
+    justify-content: center;
   }
 
   .login-modal-overlay::before,
@@ -449,24 +450,25 @@
   .login-modal-container {
     flex-direction: column;
     height: auto;
-    max-height: 90vh;
-    overflow-y: auto;
-    border-radius: 24px 24px 0 0;
-    max-width: 100%;
+    max-height: calc(100dvh - 28px);
+    overflow: hidden;
+    border-radius: 24px;
+    max-width: 400px;
     width: 100%;
-    background: #f8fafc;
-    margin: 0;
-    animation: slideUpBottom 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    background: #ffffff;
+    margin: auto;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+    animation: zoomInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
 
-  @keyframes slideUpBottom {
+  @keyframes zoomInModal {
     from {
       opacity: 0;
-      transform: translateY(100%);
+      transform: scale(0.92) translateY(12px);
     }
     to {
       opacity: 1;
-      transform: translateY(0);
+      transform: scale(1) translateY(0);
     }
   }
   
@@ -482,52 +484,64 @@
   .login-modal-hero {
     display: block;
     width: 100%;
-    height: 280px; /* Slightly taller to accommodate overlap */
+    height: 85px;
     overflow: hidden;
     position: relative;
+    background: #f0fdf4;
   }
   
+  .login-hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 30%;
+  }
+
   .login-modal-hero::after {
     content: '';
     position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 100px;
-    background: linear-gradient(to top, #f8fafc, transparent);
+    height: 35px;
+    background: linear-gradient(to top, #ffffff, transparent);
     z-index: 1;
   }
   
   .login-form-container {
-    padding: 30px 25px 25px;
-    background: rgba(255, 255, 255, 0.85);
-    border-radius: 24px 24px 0 0;
-    margin-top: -60px; /* Overlap effect */
+    padding: 12px 20px 18px;
+    background: #ffffff;
+    border-radius: 20px 20px 0 0;
+    margin-top: -16px;
     position: relative;
     z-index: 2;
-    box-shadow: 0 -10px 20px rgba(0,0,0,0.05);
-    border-top: 1px solid rgba(255, 255, 255, 1);
+    box-shadow: none;
+    border-top: none;
   }
 
   .close-btn {
-    top: clamp(10px, 2vh, 15px);
-    right: clamp(10px, 3vw, 15px);
-    padding: 8px;
-    background: rgba(255, 255, 255, 0.9);
+    top: 10px;
+    right: 12px;
+    padding: 7px;
+    background: rgba(255, 255, 255, 0.92);
     border: none;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+    z-index: 10;
   }
   
   .welcome-text {
-    font-size: clamp(1.4rem, 5vw, 1.6rem);
-    margin-bottom: 8px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 6px;
     color: #111827;
+    text-align: center;
   }
   
   .welcome-subtext {
-    font-size: 0.95rem;
-    margin-bottom: clamp(20px, 4vh, 30px);
+    font-size: 0.88rem;
+    margin-bottom: 14px;
     color: #4b5563;
+    text-align: center;
   }
 
   .mobile-input-wrapper {
@@ -535,108 +549,114 @@
     align-items: stretch;
     width: 100%;
     box-sizing: border-box;
-    height: clamp(48px, 7vh, 56px);
-    margin-bottom: clamp(20px, 3vh, 25px);
+    height: 48px;
+    margin-bottom: 12px;
     background: #ffffff;
-    border: 1px solid rgba(0,0,0,0.08);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
-    border-radius: 14px;
+    border: 1.5px solid rgba(0,0,0,0.14);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    border-radius: 12px;
   }
 
   .country-code {
     display: flex;
     align-items: center;
-    padding: 0 clamp(12px, 3vw, 16px);
-    font-size: 1rem;
-    background: rgba(243, 244, 246, 0.5);
-    border-right: 1px solid rgba(0,0,0,0.05);
+    padding: 0 12px;
+    font-size: 0.95rem;
+    background: rgba(243, 244, 246, 0.7);
+    border-right: 1px solid rgba(0,0,0,0.08);
   }
 
   .mobile-input {
     flex: 1;
     width: 100%;
-    font-size: 1.1rem;
-    padding: 0 15px;
+    font-size: 1.05rem;
+    padding: 0 12px;
     box-sizing: border-box;
   }
 
   .subscribe-checkbox {
-    margin-bottom: clamp(20px, 3vh, 30px);
-    font-size: 0.9rem;
+    margin-bottom: 12px;
+    font-size: 0.85rem;
   }
   
   .otp-sent-text {
-    font-size: 0.95rem;
-    line-height: 1.5;
+    font-size: 0.92rem;
+    line-height: 1.4;
+    text-align: center;
+    margin-bottom: 12px !important;
   }
 
   .otp-boxes-container {
-    gap: clamp(8px, 2vw, 12px);
-    margin-bottom: 30px;
+    gap: 8px;
+    margin-bottom: 18px;
+    justify-content: center;
   }
 
   .otp-box-input {
-    width: clamp(40px, 12vw, 50px);
-    height: clamp(50px, 14vw, 60px);
-    font-size: clamp(1.2rem, 6vw, 1.5rem);
-    border-radius: 12px;
+    width: 42px;
+    height: 48px;
+    font-size: 1.3rem;
+    border-radius: 10px;
     background: #ffffff;
-    border: 1px solid rgba(0,0,0,0.1);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+    border: 1.5px solid rgba(0,0,0,0.12);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
   }
   
   .otp-box-input:focus {
-    box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.15), 0 4px 12px rgba(0,0,0,0.08);
-    transform: translateY(-3px);
+    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+    border-color: #16a34a;
   }
 
   .submit-btn {
-    height: clamp(48px, 7vh, 56px);
-    font-size: 1.1rem;
-    border-radius: 14px;
-    background: linear-gradient(135deg, #9db16b, #8a9d5d);
-    box-shadow: 0 8px 20px rgba(138, 157, 93, 0.4);
+    height: 48px;
+    font-size: 1.02rem;
+    font-weight: 700;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #16a34a, #15803d);
+    box-shadow: 0 6px 16px rgba(22, 163, 74, 0.3);
   }
 
   .terms-footer {
-    margin-top: clamp(25px, 4vh, 40px);
-    font-size: 0.8rem;
-    opacity: 0.8;
+    margin-top: 12px;
+    font-size: 0.74rem;
+    opacity: 0.82;
+    text-align: center;
   }
 
   .support-email {
-    margin-top: 10px;
-    padding: 6px 14px;
+    margin-top: 6px;
+    padding: 4px 10px;
     background: rgba(138, 157, 93, 0.1);
+    font-size: 0.74rem;
   }
 
   .mobile-login-logo-header {
     display: flex !important;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    margin-bottom: 12px;
+    gap: 8px;
+    margin-bottom: 8px;
   }
   .mobile-login-logo-img {
-    width: 44px;
-    height: 44px;
+    width: 36px;
+    height: 36px;
     object-fit: contain;
   }
   .mobile-login-brand-text {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    line-height: 1.1;
+    line-height: 1.05;
   }
   .mobile-brand-line1 {
     font-family: 'Playfair Display', serif;
-    font-size: 1.3rem;
+    font-size: 1.15rem;
     font-weight: 700;
     color: #15803d;
   }
   .mobile-brand-line2 {
     font-family: 'Playfair Display', serif;
-    font-size: 1.05rem;
+    font-size: 0.95rem;
     font-weight: 600;
     color: #0f172a;
   }
@@ -645,4 +665,3 @@
 .mobile-login-logo-header {
   display: none;
 }
-

@@ -4,6 +4,7 @@ import { Phone, Lock, Star, X, Leaf, ShieldCheck, Heart } from 'lucide-react';
 import { useProducts } from '../context/ProductsContext';
 import { useCart } from '../context/CartContext';
 import { useAuthModal } from '../context/AuthModalContext';
+import { useLanguage } from '../context/LanguageContext';
 import { API_BASE_URL } from '../services/api';
 import BrandLogoVideo from '../components/BrandLogoVideo';
 import heartImg from '../assets/heart.webp';
@@ -60,6 +61,7 @@ export default function Login() {
   const { refreshProducts } = useProducts();
   const { refreshCart } = useCart();
   const { isLoginModalOpen, closeLoginModal } = useAuthModal();
+  const { language } = useLanguage();
 
   // Reset mobile field to empty whenever login modal opens (unless user already typed something)
   useEffect(() => {
@@ -455,7 +457,9 @@ export default function Login() {
                 <span className="mobile-brand-line2">Herbbals<span className="brand-reg">®</span></span>
               </div>
             </div>
-            <h2 className="welcome-text">Welcome To Dharani Herbbals!</h2>
+            <h2 className="welcome-text">
+              {language === 'ta' ? 'தரணி ஹெர்பல்ஸிற்கு நல்வரவு!' : 'Welcome To Dharani Herbbals!'}
+            </h2>
 
             <form onSubmit={showOtp ? handleVerifyOtp : handleSendOtp}>
               {!showOtp ? (
@@ -471,7 +475,7 @@ export default function Login() {
                       id="mobile"
                       autoComplete="tel"
                       className="mobile-input"
-                      placeholder="Enter Mobile Number"
+                      placeholder={language === 'ta' ? 'மொபைல் எண்ணை உள்ளிடவும்' : 'Enter Mobile Number'}
                       value={mobile}
                       onChange={handleMobileChange}
                       onFocus={(e) => e.target.select()}
@@ -502,14 +506,14 @@ export default function Login() {
                   {error && <div className="error-message">{error}</div>}
 
                   <button type="submit" className="submit-btn" disabled={loading}>
-                    {loading ? 'Sending OTP...' : 'Submit'}
+                    {loading ? (language === 'ta' ? 'அனுப்பப்படுகிறது...' : 'Sending OTP...') : (language === 'ta' ? 'தொடரவும்' : 'Submit')}
                   </button>
                 </>
               ) : (
                 <>
                   <div className="otp-container-wrapper">
                     <p className="otp-sent-text" style={{ marginBottom: '15px' }}>
-                      Verification code sent to <br />
+                      {language === 'ta' ? 'சரிபார்ப்புக் குறியீடு அனுப்பப்பட்ட எண்:' : 'Verification code sent to'} <br />
                       <strong>+91 {mobile}</strong>
                       <button
                         type="button"
@@ -524,7 +528,7 @@ export default function Login() {
                           setError(null);
                         }}
                       >
-                        Edit
+                        {language === 'ta' ? 'மாற்று' : 'Edit'}
                       </button>
                     </p>
 
@@ -592,10 +596,10 @@ export default function Login() {
 
                   <div style={{ display: 'flex', gap: '12px', marginTop: '16px' }}>
                     <button type="submit" className="submit-btn" disabled={loading} style={{ flex: 2 }}>
-                      {loading ? 'Verifying...' : 'Verify & Proceed'}
+                      {loading ? (language === 'ta' ? 'சரிபார்க்கிறது...' : 'Verifying...') : (language === 'ta' ? 'சரிபார்த்து உள்நுழைக' : 'Verify & Proceed')}
                     </button>
                     <button type="button" className="submit-btn" disabled={loading || resendTimer > 0} onClick={handleResendOtp} style={{ flex: 1, background: '#f1f5f9', color: (loading || resendTimer > 0) ? '#94a3b8' : '#0f172a' }}>
-                      {resendTimer > 0 ? `Wait ${resendTimer}s` : 'Resend'}
+                      {resendTimer > 0 ? (language === 'ta' ? `${resendTimer} விநாடி` : `Wait ${resendTimer}s`) : (language === 'ta' ? 'மீண்டும் அனுப்பு' : 'Resend')}
                     </button>
                   </div>
                 </>

@@ -4,7 +4,7 @@ import { ShoppingCart, Star, SlidersHorizontal, Heart, Plus, Clock, ShoppingBag,
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
 import { useProducts } from '../context/ProductsContext';
-import { useLanguage } from '../context/LanguageContext';
+import { useLanguage, getCategoryDisplayName, getBrandDisplayName } from '../context/LanguageContext';
 import { API_BASE_URL, resolveMediaUrl } from '../services/api';
 import { formatProductPackSize, formatProductDisplayName, formatCurrency } from '../utils/productFormatters';
 import { searchProducts } from '../utils/searchHelper';
@@ -170,22 +170,8 @@ export { ProductCard };
 
 // ─── Category Tab ─────────────────────────────────────────────────────────────
 const CategoryTab = ({ cat, activeCategory, onClick }) => {
-  const { language, translateText, t } = useLanguage();
-  const [name, setName] = useState(cat);
-
-  useEffect(() => {
-    if (cat === 'All') {
-      setName(t('allProducts'));
-      return;
-    }
-    let active = true;
-    if (language === 'ta') {
-      translateText(cat).then(res => { if (active) setName(res); });
-    } else {
-      setName(cat);
-    }
-    return () => { active = false; };
-  }, [language, cat, t]);
+  const { language, t } = useLanguage();
+  const name = cat === 'All' ? t('allProducts') : (language === 'ta' ? getCategoryDisplayName(cat, 'ta') : cat);
 
   return (
     <button
@@ -282,20 +268,14 @@ export default function Shop() {
       return;
     }
     if (activeBrand) {
-      setTranslatedHeroCat(`Brand: ${activeBrand}`);
+      setTranslatedHeroCat(language === 'ta' ? `பிராண்ட்: ${getBrandDisplayName(activeBrand, 'ta')}` : `Brand: ${activeBrand}`);
       return;
     }
     if (activeCategory === 'All') {
-      setTranslatedHeroCat(t('Explore Our Products'));
+      setTranslatedHeroCat(language === 'ta' ? 'எங்கள் தயாரிப்புகள்' : 'Explore Our Products');
       return;
     }
-    let active = true;
-    if (language === 'ta') {
-      translateText(activeCategory).then(res => { if (active) setTranslatedHeroCat(res); });
-    } else {
-      setTranslatedHeroCat(activeCategory);
-    }
-    return () => { active = false; };
+    setTranslatedHeroCat(language === 'ta' ? getCategoryDisplayName(activeCategory, 'ta') : activeCategory);
   }, [language, activeCategory, activeBrand, activeSearch, t]);
 
   const categories = useMemo(() => {
