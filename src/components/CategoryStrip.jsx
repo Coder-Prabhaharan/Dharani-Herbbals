@@ -48,7 +48,7 @@ export default function CategoryStrip() {
   });
   const [searchParams] = useSearchParams();
   const activeCategory = searchParams.get('category');
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
 
   useEffect(() => {
     const controller = new AbortController();

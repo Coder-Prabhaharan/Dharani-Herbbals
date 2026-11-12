@@ -8,7 +8,7 @@ import { formatProductDisplayName } from '../utils/productFormatters';
 import { API_BASE_URL, SLIDERS_API_URL, resolveMediaUrl } from '../services/api';
 import sathuMaavuImg from '../assets/sathu_maavu_transparent.webp';
 import dharaniAvatar from '../assets/dharani_avatar.webp';
-import dharaniMascotAnnouncing from '../assets/dharani_mascot_announcing.png';
+import dharaniMascotAnnouncing from '../assets/dharani_avatar.webp';
 import wildTurmericBannerImg from '../assets/wild_turmeric_offer_banner.jpg';
 import bodySoapImg from '../assets/body_soap_transparent.webp';
 import chemparuthiShampooImg from '../assets/chemparuthi_shampoo_transparent_v3.webp';

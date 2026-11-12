@@ -1,6 +1,6 @@
 import { useLanguage } from '../context/LanguageContext';
 import './OurJourney.css';
-import teamPhoto from '../assets/grp.png';
+import teamPhoto from '../assets/grp.webp';
 
 export default function OurJourney() {
   const { t } = useLanguage();

@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import './ImageSlider.css';
 
-import p1 from '../assets/4.png';
-import p2 from '../assets/2.png';
-import p4 from '../assets/heart.png';
+import p1 from '../assets/4.webp';
+import p2 from '../assets/2.webp';
+import p4 from '../assets/heart.webp';
 
 const SLIDE_DURATION_MS = 10000;
 const MIN_SWIPE_DISTANCE = 50;
