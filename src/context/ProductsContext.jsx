@@ -150,25 +150,29 @@ export function ProductsProvider({ children }) {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 12000);
 
-    fetch(apiUrl, {
+    // Kick off both fetches in parallel — products and product-images are independent
+    const productsPromise = fetch(apiUrl, {
       signal: controller.signal,
       headers: {
         'ngrok-skip-browser-warning': 'true'
       }
-    })
+    });
+    const productImagesPromise = fetch(`${API_BASE_URL}/product-images/`, {
+      headers: { 'ngrok-skip-browser-warning': 'true' }
+    }).catch(() => null); // product-images failure must never block product load
+
+    productsPromise
       .then(res => {
         clearTimeout(timeoutId);
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         return res.json();
       })
       .then(async data => {
-        // Fetch product-images to overlay custom uploaded images
+        // Await the already-in-flight product-images request (no extra round-trip)
         let extraImagesMap = {};
         try {
-          const piRes = await fetch(`${API_BASE_URL}/product-images/`, {
-            headers: { 'ngrok-skip-browser-warning': 'true' }
-          });
-          if (piRes.ok) {
+          const piRes = await productImagesPromise;
+          if (piRes && piRes.ok) {
             const piData = await piRes.json();
             const piList = Array.isArray(piData) ? piData : (piData.data || piData.results || []);
             piList.forEach(pi => {

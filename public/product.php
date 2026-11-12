@@ -42,7 +42,7 @@ if (!empty($productId)) {
 
     // 2. If not found in cache, fetch directly from backend API
     if (!$product) {
-        $apiUrl = 'https://api.codingboss.in/products/' . $productId . '/';
+        $apiUrl = 'http://179.197.251.47:30080/herbal/products/' . $productId . '/';
         $ctx = stream_context_create([
             'http' => [
                 'timeout' => 3,

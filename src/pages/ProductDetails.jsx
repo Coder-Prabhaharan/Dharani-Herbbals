@@ -30,6 +30,8 @@ export default function ProductDetails() {
   const [reviews, setReviews] = useState([]);
   const [reviewSummary, setReviewSummary] = useState(null);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [openAccordion, setOpenAccordion] = useState({ desc: true, benefits: true, ingredients: false, directions: false, delivery: false, reviews: false });
+  const toggleAccordion = (key) => setOpenAccordion(prev => ({ ...prev, [key]: !prev[key] }));
   const [showDesktopBuyBar, setShowDesktopBuyBar] = useState(false);
 
   // Customer write review modal & form state
@@ -706,6 +708,53 @@ export default function ProductDetails() {
     mediaItems.push({ type: 'image', src: safeImg, thumb: safeImg });
   }
 
+  
+  const calculatedBenefits = (() => {
+    if (fetchedKeyBenefits && fetchedKeyBenefits.length > 0) return fetchedKeyBenefits;
+    const name = (product.name || '').toLowerCase();
+    const category = (product.category_name || '').toLowerCase();
+    const idHash = product.id ? product.id : (product.name ? product.name.length : 1);
+    let pool = [];
+    if (name.includes('black tea')) {
+      pool = ['Refreshing Daily Brew', 'Natural Antioxidant Support', 'Boosts Focus and Alertness', 'Smooth Energy Lift'];
+    } else if (name.includes('jaggery')) {
+      pool = ['Natural Sweetener', 'Rich in Minerals', 'Made from Pure Sugarcane', 'Better Than Refined Sugar'];
+    } else if (name.includes('rose gel') || name.includes('rose')) {
+      pool = ['Rose-Infused Hydration', 'Oil-Free Freshness', 'Soothes Sensitive Skin', 'Helps Reduce Blackheads'];
+    } else if (name.includes('green gram')) {
+      pool = ['Gentle Skin Exfoliation', 'Unclogs Pores', 'Brightens Skin', 'Natural Face Pack Base'];
+    } else if (name.includes('herbal tea')) {
+      pool = ['Immune Shield', 'Respiratory Care', 'Throat Comfort', 'Liver Wellness'];
+    } else if (name.includes('ginger') && name.includes('coffee')) {
+      pool = ['Herbal Cold Relief', 'Natural Body Warmth', 'Respiratory Comfort', 'Digestive Support'];
+    } else if (name.includes('aavaram')) {
+      pool = ['Inner Body Cooling', 'Radiant Skin Support', 'Natural Body Cleanse', 'Herbal Rejuvenation'];
+    } else if (name.includes('guava')) {
+      pool = ['Polyphenol-Rich Goodness', 'Supports Glucose Balance', 'Heart-Friendly Botanicals', 'Metabolic Balance Support'];
+    } else if (name.includes('coconut') || name.includes('soap')) {
+      pool = ['Deeply Moisturizes Skin', 'Gently Cleanses Without Drying', 'Leaves Skin Soft and Smooth', 'Suitable for Daily Use'];
+    } else if (name.includes('karisalankanni') || name.includes('karisalankanni shampoo')) {
+      pool = ['Supports Natural Hair Darkening', 'Root-to-Tip Nourishment', 'Herbal Scalp Rejuvenation', 'Botanical Hair Revival'];
+    } else if (name.includes('hair') || category.includes('hair') || name.includes('shampoo') || name.includes('oil')) {
+      pool = ['Strengthens Roots', 'Reduces Hair Fall', 'Adds Natural Shine', 'Improves Scalp Health', 'Controls Dandruff', 'Repairs Split Ends'];
+    } else if (name.includes('face') || name.includes('skin') || name.includes('glow') || category.includes('skin') || name.includes('maavu') || name.includes('gel')) {
+      pool = ['Brightens Skin Tone', 'Clears Blemishes', 'Deep Hydration', 'Anti-aging Properties', 'Tightens Pores', 'Provides Radiant Glow'];
+    } else {
+      pool = ['Boosts Immunity', 'Improves Digestion', 'Rich in Iron', 'Increases Energy', 'Purifies Blood', '100% Natural Ingredients'];
+    }
+    let benefits = [];
+    if (pool.length <= 4) benefits = [...pool];
+    else {
+      const maxStartIndex = Math.max(1, pool.length - 4);
+      const startIndex = idHash % maxStartIndex;
+      const step = (idHash % 3) + 1;
+      for (let i = 0; i < 4; i++) {
+        benefits.push(pool[(startIndex + (i * step)) % pool.length]);
+      }
+    }
+    return benefits;
+  })();
+
   const currentMedia = mediaItems[currentImgIndex];
   const getProductShareUrl = () => {
     if (typeof window === 'undefined') return `https://www.dharaniherbbals.in/product/${product.id}`;
@@ -848,13 +897,38 @@ export default function ProductDetails() {
         </div>
       </div>
 
-      <div className="pd-pro-container">
-        {/* Left Column: Gallery (Professional Layout) */}
-        <div className="pd-pro-gallery">
+      <div className="pd-pro-container pd-nike-layout">
+        {/* Left Column: Nike-style Media Gallery (Dual Column on Desktop) */}
+        <div className="pd-nike-gallery-wrapper">
+          {mediaItems.length > 1 && (
+            <div className="pd-nike-thumbs-vertical" role="tablist" aria-label="Product thumbnails">
+              {mediaItems.map((media, idx) => (
+                <button
+                  key={idx}
+                  type="button"
+                  ref={(el) => (thumbRefs.current[idx] = el)}
+                  className={`pd-nike-thumb-btn ${currentImgIndex === idx ? 'active' : ''}`}
+                  onClick={() => setCurrentImgIndex(idx)}
+                  onMouseEnter={() => setCurrentImgIndex(idx)}
+                  aria-label={`View photo ${idx + 1}`}
+                >
+                  <img
+                    src={media.thumb}
+                    alt=""
+                    onError={(e) => {
+                      if (!e.target.dataset.retried) {
+                        e.target.dataset.retried = 'true';
+                      }
+                    }}
+                  />
+                </button>
+              ))}
+            </div>
+          )}
 
           {/* Main Media Container */}
           <div
-            className="pd-pro-main-image-container"
+            className="pd-pro-main-image-container pd-nike-main-view"
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
@@ -882,10 +956,7 @@ export default function ProductDetails() {
               </>
             )}
 
-            <div
-              className="pd-pro-image-track"
-              ref={trackRef}
-            >
+            <div className="pd-pro-image-track" ref={trackRef}>
               {mediaItems.map((media, idx) => (
                 <div
                   key={idx}
@@ -899,16 +970,13 @@ export default function ProductDetails() {
                       camera-controls
                       shadow-intensity="1"
                       environment-image="neutral"
-                      style={{ width: '100%', height: '100%', minHeight: '300px', backgroundColor: '#f9fafb', borderRadius: '4px' }}
+                      style={{ width: '100%', height: '100%', minHeight: '380px', backgroundColor: '#f6f6f6', borderRadius: '8px' }}
                     ></model-viewer>
                   ) : (
                     <img
                       src={media.src || '/logo.png'}
-                      alt={`${translatedName} - ${product.category_name || 'Herbal Product'} by Dharani Herbals (View ${idx + 1})`}
-                      className={`pd-pro-main-image ${media.src && (media.src.includes('/4.jpeg') || media.src.endsWith('4.jpeg') || product?.id === 1301 || (product?.name && product.name.toLowerCase().includes('keelanelli')))
-                          ? 'pd-img-zoom-fit'
-                          : ''
-                        }`}
+                      alt={`${translatedName} view ${idx + 1}`}
+                      className="pd-pro-main-image"
                       fetchPriority={idx === 0 ? "high" : "auto"}
                       loading={idx === 0 ? "eager" : "lazy"}
                       decoding="async"
@@ -950,467 +1018,392 @@ export default function ProductDetails() {
               </button>
             </div>
           </div>
-
-          {/* Horizontal Thumbnails - ONLY SHOW IF CRM IMAGES EXIST */}
-          {crmGalleryImages.length > 0 && (
-            <div className="pd-pro-thumbnails-horizontal">
-              {mediaItems.map((media, idx) => (
-                <div
-                  key={idx}
-                  ref={(el) => (thumbRefs.current[idx] = el)}
-                  className={`pd-pro-thumb ${currentImgIndex === idx ? 'active' : ''}`}
-                  onClick={() => setCurrentImgIndex(idx)}
-                >
-                  <img
-                    src={media.thumb}
-                    alt={`${translatedName} thumbnail view ${idx + 1}`}
-                    onError={(e) => {
-                      if (!e.target.dataset.retried) {
-                        e.target.dataset.retried = 'true';
-                      }
-                    }}
-                  />
-                </div>
-              ))}
-            </div>
-          )}
         </div>
 
-        {/* Right Column: Information */}
-        <div className="pd-pro-info">
-          <h1 className="pd-pro-title">{translatedName}</h1>
-
-          {hasValidReviews ? (
-            <div className="pd-pro-rating">
-              <div className="pro-stars">
-                <span className="star">★</span>
-                <span className="score">{avgRating.toFixed(1)}</span>
+        {/* Right Column: Nike-style Sticky Information */}
+        <div className="pd-pro-info pd-nike-sidebar">
+          {/* Subtitle & Title */}
+          <div className="pd-nike-header-block">
+            <span className="pd-nike-category">
+              {product.category_name || 'Herbal Care'} • 100% Botanical
+            </span>
+            <h1 className="pd-nike-title">{translatedName}</h1>
+            {hasValidReviews ? (
+              <div className="pd-nike-rating-row">
+                <div className="pd-nike-rating-pill">
+                  <Star size={14} fill="#111111" color="#111111" />
+                  <span className="pd-nike-rating-val">{avgRating.toFixed(1)}</span>
+                </div>
+                <button
+                  type="button"
+                  className="pd-nike-reviews-link"
+                  onClick={() => {
+                    setOpenAccordion(prev => ({ ...prev, reviews: true }));
+                    setTimeout(() => {
+                      document.getElementById('nike-accordion-reviews')?.scrollIntoView({ behavior: 'smooth' });
+                    }, 100);
+                  }}
+                >
+                  ({reviews?.length || 4} Reviews)
+                </button>
+                <span className="pd-nike-dot">•</span>
+                <button
+                  type="button"
+                  className="pd-nike-write-review-btn"
+                  onClick={() => setShowReviewModal(true)}
+                >
+                  + Write a Review
+                </button>
               </div>
-              <button
-                type="button"
-                className="pd-inline-add-review-btn"
-                onClick={() => setShowReviewModal(true)}
-              >
-                + Write a Review
-              </button>
-            </div>
-          ) : (
-            <div className="pd-pro-rating no-reviews">
-              <button
-                type="button"
-                className="pd-inline-add-review-btn"
-                onClick={() => setShowReviewModal(true)}
-              >
-                + Add Review
-              </button>
-            </div>
-          )}
+            ) : (
+              <div className="pd-nike-rating-row">
+                <button
+                  type="button"
+                  className="pd-nike-write-review-btn"
+                  onClick={() => setShowReviewModal(true)}
+                >
+                  + Add First Review
+                </button>
+              </div>
+            )}
+          </div>
 
-          {/* Unified Purchase Section: Price, Variations, Add to Cart / Buy Now & Delivery Check */}
-          <div className="pd-purchase-section">
-            <div className="pd-pro-price-block">
-              <span className="pro-current-price">{formatCurrency(selectedVariation ? selectedVariation.price : product.price)}</span>
+          {/* Pricing Block */}
+          <div className="pd-nike-price-section">
+            <div className="pd-nike-price-row">
+              <span className="pd-nike-price-main">
+                {formatCurrency(selectedVariation ? selectedVariation.price : product.price)}
+              </span>
               {(() => {
                 const currentVar = selectedVariation || product.default_variation;
                 const packSize = currentVar ? formatVariationLabel(currentVar, product) : (product.pack_size || formatProductPackSize(product));
                 return packSize ? (
-                  <span style={{ fontSize: '1.2rem', color: '#6b7280', marginLeft: '10px', fontWeight: '500' }}>
-                    ({packSize})
-                  </span>
+                  <span className="pd-nike-pack-tag">({packSize})</span>
                 ) : null;
               })()}
-              <p className="tax-inclusive">{t('taxInclusive') || 'Inclusive of all taxes'}</p>
+              {product.originalPrice && (
+                <span className="pd-nike-original-price">{product.originalPrice}</span>
+              )}
+              {product.discount && (
+                <span className="pd-nike-discount-tag">{product.discount}</span>
+              )}
+            </div>
+            <p className="pd-nike-tax-note">
+              {t('taxInclusive') || 'Inclusive of all taxes'} (Also includes all applicable duties)
+            </p>
+          </div>
+
+          {/* Select Size / Pack (Nike Style Tiles) */}
+          {((fetchedVariations && fetchedVariations.length > 0) || (product.variations && product.variations.length > 0)) && (
+            <div className="pd-nike-sizes-block">
+              <div className="pd-nike-sizes-header">
+                <span className="pd-nike-sizes-title">Select Size / Pack</span>
+                <span className="pd-nike-stock-badge">In Stock</span>
+              </div>
+              <div className="pd-nike-sizes-grid">
+                {(fetchedVariations && fetchedVariations.length > 0 ? fetchedVariations : product.variations).map((v, idx) => {
+                  const isSelected = selectedVariation
+                    ? String(selectedVariation.id || selectedVariation.variation_id) === String(v.id || v.variation_id)
+                    : (product.default_variation_id && String(product.default_variation_id) === String(v.id || v.variation_id));
+                  return (
+                    <button
+                      key={idx}
+                      type="button"
+                      className={`pd-nike-size-pill ${isSelected ? 'active' : ''}`}
+                      onClick={() => setSelectedVariation(v)}
+                    >
+                      <span className="size-name">{formatVariationLabel(v, product)}</span>
+                      <span className="size-price">{formatCurrency(v.price)}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* Quantity and Primary Call-to-Actions (Nike Signature Pill Buttons) */}
+          <div className="pd-nike-cta-group">
+            <div className="pd-nike-qty-row">
+              <span className="pd-nike-qty-label">Quantity:</span>
+              <div className="pd-nike-qty-picker">
+                <button
+                  type="button"
+                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                  aria-label="Decrease quantity"
+                >
+                  -
+                </button>
+                <span className="qty-num">{quantity}</span>
+                <button
+                  type="button"
+                  onClick={() => setQuantity(quantity + 1)}
+                  aria-label="Increase quantity"
+                >
+                  +
+                </button>
+              </div>
             </div>
 
-            {((fetchedVariations && fetchedVariations.length > 0) || (product.variations && product.variations.length > 0)) && (
-              <div className="pd-premium-variations-wrapper">
-                <h4 className="variations-title">{product.variationLabel || 'Available Size / Pack'}</h4>
-                <div className="premium-variations-grid">
-                  {(fetchedVariations && fetchedVariations.length > 0 ? fetchedVariations : product.variations).map((v, idx) => {
-                    const isSelected = selectedVariation
-                      ? String(selectedVariation.id || selectedVariation.variation_id) === String(v.id || v.variation_id)
-                      : (product.default_variation_id && String(product.default_variation_id) === String(v.id || v.variation_id));
-                    return (
-                      <div
-                        key={idx}
-                        className={`premium-variation-card ${isSelected ? 'active' : ''}`}
-                        onClick={() => setSelectedVariation(v)}
-                      >
-                        {isSelected && (
-                          <div className="premium-variation-check">
-                            <CheckCircle size={16} weight="fill" />
-                          </div>
-                        )}
-                        <span className="premium-variation-name">{formatVariationLabel(v, product)}</span>
-                        <span className="premium-variation-price">{formatCurrency(v.price)}</span>
-                      </div>
-                    );
-                  })}
-                </div>
+            <button
+              type="button"
+              className="pd-nike-btn-add"
+              onClick={() => addToCart(product, quantity, selectedVariation?.id || selectedVariation?.variation_id || product.default_variation_id)}
+            >
+              <ShoppingCart size={19} strokeWidth={2.2} />
+              <span>{t('addToCart') || 'Add to Cart'}</span>
+            </button>
+
+            <button
+              type="button"
+              className="pd-nike-btn-buy"
+              onClick={async () => {
+                await addToCart(product, quantity, selectedVariation?.id || selectedVariation?.variation_id || product.default_variation_id, true);
+                window.scrollTo({ top: 0, behavior: 'instant' });
+                navigate('/checkout');
+              }}
+            >
+              <span>Buy Now</span>
+            </button>
+
+            {/* Sharing Options */}
+            <div className="pd-nike-share-row">
+              <button
+                type="button"
+                className="pd-nike-share-item"
+                onClick={shareToWhatsApp}
+                title="Share on WhatsApp"
+              >
+                <MessageCircle size={16} />
+                <span>WhatsApp</span>
+              </button>
+              <button
+                type="button"
+                className={`pd-nike-share-item ${shareCopied ? 'copied' : ''}`}
+                onClick={copyShareLink}
+                title="Copy product link"
+              >
+                {shareCopied ? <Check size={16} /> : <Copy size={16} />}
+                <span>{shareCopied ? 'Copied!' : 'Copy Link'}</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Delivery & Pincode Check (Sleek Nike Card) */}
+          <div className="pd-nike-delivery-card">
+            <div className="pd-nike-delivery-head">
+              <Truck size={18} />
+              <span>Delivery & Pincode Availability</span>
+            </div>
+            <div className="pd-nike-pincode-input-wrap">
+              <input
+                type="text"
+                placeholder="Enter 6-digit PIN code"
+                value={pinCode}
+                maxLength={6}
+                onChange={(e) => {
+                  setPinCode(e.target.value.replace(/\D/g, '').slice(0, 6));
+                  if (pinError) setPinError('');
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleVerifyPincode();
+                  }
+                }}
+              />
+              <button
+                type="button"
+                onClick={handleVerifyPincode}
+                disabled={isCheckingPin || pinCode.length !== 6}
+              >
+                {isCheckingPin ? '...' : 'Check'}
+              </button>
+            </div>
+
+            {deliveryInfo && (
+              <div className="pd-nike-delivery-success">
+                <CheckCircle size={15} color="#16a34a" />
+                <span>
+                  Deliverable to {deliveryInfo.location ? `${deliveryInfo.location}` : `PIN ${deliveryInfo.pin}`} in ${deliveryInfo.timeline}
+                </span>
               </div>
             )}
+            {pinError && (
+              <p className="pd-nike-delivery-error">{pinError}</p>
+            )}
+            <p className="pd-nike-delivery-perk">
+              ✓ Free Standard Shipping on orders of ₹500 or more
+            </p>
+          </div>
 
-            <div className="pd-pro-divider"></div>
-
-            {/* Add to Cart Actions */}
-            <div className="pd-premium-actions-wrapper">
-              <div className="premium-qty-selector">
-                <button type="button" onClick={() => setQuantity(Math.max(1, quantity - 1))} aria-label="Decrease quantity">-</button>
-                <input type="text" value={quantity} readOnly aria-label="Selected quantity" />
-                <button type="button" onClick={() => setQuantity(quantity + 1)} aria-label="Increase quantity">+</button>
-              </div>
-              <div className="pd-action-buttons-row">
-                <button type="button" className="premium-add-btn" onClick={() => addToCart(product, quantity, selectedVariation?.id || selectedVariation?.variation_id || product.default_variation_id)}>
-                  <ShoppingCart size={20} strokeWidth={2.5} />
-                  <span>{t('addToCart') || 'Add to Cart'}</span>
-                </button>
-                <button
-                  type="button"
-                  className="premium-buy-now-btn"
-                  onClick={async () => {
-                    await addToCart(product, quantity, selectedVariation?.id || selectedVariation?.variation_id || product.default_variation_id, true);
-                    window.scrollTo({ top: 0, behavior: 'instant' });
-                    navigate('/checkout');
-                  }}
-                >
-                  <span>Buy Now</span>
-                </button>
-              </div>
-
-              {/* WhatsApp Share & Direct Link Sharing */}
-              <div className="pd-share-block">
-                <span className="pd-share-label">Share Product:</span>
-                <div className="pd-share-actions">
-                  <button
-                    type="button"
-                    className="pd-share-btn pd-share-whatsapp"
-                    onClick={shareToWhatsApp}
-                    aria-label="Share product on WhatsApp"
-                    title="Share product on WhatsApp"
-                  >
-                    <MessageCircle size={18} className="pd-wa-icon" />
-                    <span>Share on WhatsApp</span>
-                  </button>
-                  <button
-                    type="button"
-                    className={`pd-share-btn pd-share-copy ${shareCopied ? 'copied' : ''}`}
-                    onClick={copyShareLink}
-                    aria-label="Copy direct product link"
-                    title="Copy direct product link"
-                  >
-                    {shareCopied ? (
-                      <>
-                        <Check size={16} />
-                        <span>Link Copied!</span>
-                      </>
-                    ) : (
-                      <>
-                        <Copy size={16} />
-                        <span>Copy Link</span>
-                      </>
-                    )}
-                  </button>
+          {/* Nike Signature Collapsible Accordion Sections */}
+          <div className="pd-nike-accordion">
+            {/* 1. Description */}
+            <div className="pd-nike-accordion-item">
+              <button
+                type="button"
+                className="pd-nike-accordion-header"
+                onClick={() => toggleAccordion('desc')}
+                aria-expanded={openAccordion.desc}
+              >
+                <span>{t('descriptionLabel') || 'Product Description'}</span>
+                {openAccordion.desc ? <ChevronUp size={19} /> : <ChevronDown size={19} />}
+              </button>
+              {openAccordion.desc && (
+                <div className="pd-nike-accordion-body">
+                  {(translatedDesc || '').split(/\n\n+/).map((para, idx) => (
+                    <p key={idx} className="pd-nike-desc-p">
+                      {para.trim()}
+                    </p>
+                  ))}
                 </div>
-              </div>
+              )}
             </div>
 
-            {/* In-Section PIN-Code Delivery Check */}
-            <div className="pd-pincode-check-card">
-              <div className="pd-pincode-header">
-                <Truck size={18} className="text-emerald" />
-                <span className="pd-pincode-title">Delivery & Pincode Availability</span>
-              </div>
-              <div className="pd-pincode-input-row">
-                <input
-                  type="text"
-                  placeholder="Enter 6-digit PIN"
-                  value={pinCode}
-                  maxLength={6}
-                  onChange={(e) => {
-                    setPinCode(e.target.value.replace(/\D/g, '').slice(0, 6));
-                    if (pinError) setPinError('');
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault();
-                      handleVerifyPincode();
-                    }
-                  }}
-                  className="pd-pincode-input"
-                />
-                <button
-                  type="button"
-                  className="pd-pincode-check-btn"
-                  onClick={handleVerifyPincode}
-                  disabled={isCheckingPin || pinCode.length !== 6}
-                >
-                  {isCheckingPin ? 'Checking...' : 'Check'}
-                </button>
-              </div>
-
-              {deliveryInfo && (
-                <div className="pd-delivery-status-box success">
-                  <CheckCircle size={16} className="status-icon text-emerald" />
-                  <div>
-                    <p className="delivery-location">
-                      <strong>Deliverable</strong> {deliveryInfo.location ? `to ${deliveryInfo.location}` : `to PIN ${deliveryInfo.pin}`}
-                    </p>
-                    <p className="delivery-estimate">
-                      Estimated delivery in <strong>{deliveryInfo.timeline}</strong> (Standard courier with live tracking)
-                    </p>
-                    <p style={{ margin: '4px 0 0 0', fontSize: '0.85rem', color: '#16a34a', fontWeight: '500' }}>
-                      ✓ Free Shipping on orders of ₹500 or more
-                    </p>
+            {/* 2. Key Benefits */}
+            <div className="pd-nike-accordion-item">
+              <button
+                type="button"
+                className="pd-nike-accordion-header"
+                onClick={() => toggleAccordion('benefits')}
+                aria-expanded={openAccordion.benefits}
+              >
+                <span>Key Benefits & Features</span>
+                {openAccordion.benefits ? <ChevronUp size={19} /> : <ChevronDown size={19} />}
+              </button>
+              {openAccordion.benefits && (
+                <div className="pd-nike-accordion-body">
+                  <div className="pd-nike-benefits-list">
+                    {calculatedBenefits.map((b, idx) => (
+                      <div key={idx} className="pd-nike-benefit-item">
+                        <CheckCircle size={16} className="text-emerald" />
+                        <span>{b}</span>
+                      </div>
+                    ))}
                   </div>
                 </div>
               )}
-
-              {pinError && (
-                <div className="pd-delivery-status-box error">
-                  <Info size={16} className="status-icon text-rose" />
-                  <p className="delivery-error-text">{pinError}</p>
-                </div>
-              )}
-
-              <div className="pd-delivery-badges-row">
-                <span>✓ Standard Courier</span>
-                <span>✓ Fast Dispatch</span>
-                <span>✓ Cash on Delivery Available</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Ultra-Modern Bento Section */}
-          <div className="pd-bento-grid">
-            {/* Bento Box 1: Description */}
-            <div className="pd-bento-cell bento-desc">
-              <div className="pd-bento-header">
-                <FileText size={18} className="pd-bento-icon text-indigo" />
-                <h3>{t('descriptionLabel') || 'Description'}</h3>
-              </div>
-              <div className="pd-bento-text">
-                {(translatedDesc || '').split(/\n\n+/).map((para, idx) => (
-                  <p key={idx} style={{ marginBottom: idx < (translatedDesc || '').split(/\n\n+/).length - 1 ? '12px' : '0', lineHeight: '1.65' }}>
-                    {para.trim()}
-                  </p>
-                ))}
-              </div>
             </div>
 
-            {/* Bento Box 2: Trust Badges (Compact) */}
-            <div className="pd-bento-cell bento-trust">
-              <div className="bento-trust-item">
-                <Leaf size={16} className="text-emerald" />
-                <span>{t('naturalTag')}</span>
-              </div>
-              <div className="bento-trust-item">
-                <ShieldCheck size={16} className="text-blue" />
-                <span>{t('labTested')}</span>
-              </div>
-              <div className="bento-trust-item">
-                <Truck size={16} className="text-amber" />
-                <span>{t('freeDelivery')}</span>
-              </div>
-            </div>
-
-            {/* Bento Box 3: Dedicated Ingredients Section */}
-            <div className="pd-bento-cell bento-ingredients">
-              <div className="pd-bento-header">
-                <Sparkles size={18} className="pd-bento-icon text-emerald" />
-                <h3>{t('ingredientsLabel') || 'Ingredients'}</h3>
-              </div>
-              {productIngredients && productIngredients.length > 0 ? (
-                <div className="bento-ingredients-list">
-                  {productIngredients.map((item, idx) => (
-                    <span key={idx} className="bento-ingredient-tag">
-                      <Leaf size={12} className="text-emerald" />
-                      {item}
-                    </span>
-                  ))}
-                </div>
-              ) : (
-                <div className="bento-info-unavailable">
-                  <Info size={16} className="text-muted" />
-                  <p>{t('ingredientsNotAvailable') || 'Ingredients information not available'}</p>
+            {/* 3. Ingredients */}
+            <div className="pd-nike-accordion-item">
+              <button
+                type="button"
+                className="pd-nike-accordion-header"
+                onClick={() => toggleAccordion('ingredients')}
+                aria-expanded={openAccordion.ingredients}
+              >
+                <span>{t('ingredientsLabel') || 'Ingredients'}</span>
+                {openAccordion.ingredients ? <ChevronUp size={19} /> : <ChevronDown size={19} />}
+              </button>
+              {openAccordion.ingredients && (
+                <div className="pd-nike-accordion-body">
+                  {productIngredients && productIngredients.length > 0 ? (
+                    <div className="pd-nike-ingredients-tags">
+                      {productIngredients.map((item, idx) => (
+                        <span key={idx} className="pd-nike-ing-tag">
+                          <Leaf size={12} />
+                          {item}
+                        </span>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="pd-nike-muted-text">
+                      {t('ingredientsNotAvailable') || 'Ingredients information not available'}
+                    </p>
+                  )}
                 </div>
               )}
             </div>
 
-            {/* Bento Box 4: Dedicated Directions for Use Section */}
-            <div className="pd-bento-cell bento-directions">
-              <div className="pd-bento-header">
-                <Compass size={18} className="pd-bento-icon text-amber" />
-                <h3>{t('directionsLabel') || 'Directions for Use'}</h3>
-              </div>
-              {productDirections ? (
-                <div className="bento-directions-content">
-                  <p className="pd-bento-text" style={{ lineHeight: '1.65' }}>{productDirections}</p>
-                </div>
-              ) : (
-                <div className="bento-info-unavailable">
-                  <Info size={16} className="text-muted" />
-                  <p>{t('usageNotAvailable') || 'Usage instructions not available'}</p>
+            {/* 4. Directions / How to Use */}
+            <div className="pd-nike-accordion-item">
+              <button
+                type="button"
+                className="pd-nike-accordion-header"
+                onClick={() => toggleAccordion('directions')}
+                aria-expanded={openAccordion.directions}
+              >
+                <span>{t('directionsLabel') || 'How to Use / Directions'}</span>
+                {openAccordion.directions ? <ChevronUp size={19} /> : <ChevronDown size={19} />}
+              </button>
+              {openAccordion.directions && (
+                <div className="pd-nike-accordion-body">
+                  {productDirections ? (
+                    <p className="pd-nike-desc-p">{productDirections}</p>
+                  ) : (
+                    <p className="pd-nike-muted-text">
+                      {t('usageNotAvailable') || 'Usage instructions not available'}
+                    </p>
+                  )}
                 </div>
               )}
             </div>
 
-            {/* Bento Box 3: Quick Benefits */}
-            <div className="pd-bento-cell bento-benefits">
-              <div className="pd-bento-header">
-                <Star size={18} className="pd-bento-icon text-pink" />
-                <h3>Key Benefits</h3>
-              </div>
-              <div className="bento-tags-wrapper">
-                {(() => {
-                  if (fetchedKeyBenefits && fetchedKeyBenefits.length > 0) {
-                    return fetchedKeyBenefits.map((benefit, index) => (
-                      <span key={index} className="bento-tag">
-                        <CheckCircle size={12} weight="fill" />
-                        {benefit}
-                      </span>
-                    ));
-                  }
+            {/* 5. Reviews Accordion */}
+            <div className="pd-nike-accordion-item" id="nike-accordion-reviews">
+              <button
+                type="button"
+                className="pd-nike-accordion-header"
+                onClick={() => toggleAccordion('reviews')}
+                aria-expanded={openAccordion.reviews}
+              >
+                <span>Reviews ({reviews?.length || 0})</span>
+                {openAccordion.reviews ? <ChevronUp size={19} /> : <ChevronDown size={19} />}
+              </button>
+              {openAccordion.reviews && (
+                <div className="pd-nike-accordion-body">
+                  <div className="pd-nike-reviews-summary">
+                    <div className="pd-nike-stars-row">
+                      {[1, 2, 3, 4, 5].map((s) => (
+                        <Star
+                          key={s}
+                          size={18}
+                          fill={s <= Math.round(avgRating) ? "#111111" : "transparent"}
+                          color="#111111"
+                        />
+                      ))}
+                      <span className="pd-nike-score-text">{avgRating.toFixed(1)} Stars</span>
+                    </div>
+                    <button
+                      type="button"
+                      className="pd-nike-write-btn-outline"
+                      onClick={() => setShowReviewModal(true)}
+                    >
+                      Write a Review
+                    </button>
+                  </div>
 
-                  const name = (product.name || '').toLowerCase();
-                  const category = (product.category_name || '').toLowerCase();
-                  const idHash = product.id ? product.id : (product.name ? product.name.length : 1);
-
-                  let pool = [];
-
-                  if (name.includes('black tea')) {
-                    pool = [
-                      "Refreshing Daily Brew", "Natural Antioxidant Support", "Boosts Focus & Alertness", "Smooth Energy Lift"
-                    ];
-                  } else if (name.includes('jaggery')) {
-                    pool = [
-                      "Natural Sweetener", "Rich in Minerals", "Made from Pure Sugarcane", "Better Than Refined Sugar"
-                    ];
-                  } else if (name.includes('rose gel') || name.includes('rose')) {
-                    pool = [
-                      "Rose-Infused Hydration", "Oil-Free Freshness", "Soothes Sensitive Skin", "Helps Reduce Blackheads"
-                    ];
-                  } else if (name.includes('green gram')) {
-                    pool = [
-                      "Gentle Skin Exfoliation", "Unclogs Pores", "Brightens Skin", "Natural Face Pack Base"
-                    ];
-                  } else if (name.includes('herbal tea')) {
-                    pool = [
-                      "Immune Shield", "Respiratory Care", "Throat Comfort", "Liver Wellness"
-                    ];
-                  } else if (name.includes('ginger') && name.includes('coffee')) {
-                    pool = [
-                      "Herbal Cold Relief ( Seasonal Wellness )", "Natural Body Warmth", "Respiratory Comfort", "Digestive Support"
-                    ];
-                  } else if (name.includes('aavaram')) {
-                    pool = [
-                      "Inner Body Cooling", "Radiant Skin Support", "Natural Body Cleanse", "Herbal Rejuvenation"
-                    ];
-                  } else if (name.includes('guava')) {
-                    pool = [
-                      "Polyphenol-Rich Goodness", "Supports Glucose Balance", "Heart-Friendly Botanicals", "Metabolic Balance Support"
-                    ];
-                  } else if (name.includes('coconut') || name.includes('soap')) {
-                    pool = [
-                      "Deeply Moisturizes Skin", "Gently Cleanses Without Drying",
-                      "Leaves Skin Soft & Smooth", "Suitable for Daily Use"
-                    ];
-                  } else if (name.includes('karisalankanni') || name.includes('karisalankanni shampoo')) {
-                    pool = [
-                      "Supports Natural Hair Darkening", "Root-to-Tip Nourishment", "Herbal Scalp Rejuvenation", "Botanical Hair Revival"
-                    ];
-                  } else if (name.includes('hair') || category.includes('hair') || name.includes('shampoo') || name.includes('oil')) {
-                    pool = [
-                      "Strengthens Roots", "Reduces Hair Fall", "Adds Natural Shine", "Improves Scalp Health",
-                      "Controls Dandruff", "Repairs Split Ends", "Nourishes Hair Follicles", "Promotes Hair Growth",
-                      "Adds Volume", "Prevents Greying", "Softens Hair Texture", "Detangles Frizz"
-                    ];
-                  } else if (name.includes('face') || name.includes('skin') || name.includes('glow') || category.includes('skin') || name.includes('maavu') || name.includes('gel')) {
-                    pool = [
-                      "Brightens Skin Tone", "Clears Blemishes", "Deep Hydration", "Anti-aging Properties",
-                      "Reduces Pigmentation", "Tightens Pores", "Soothes Sunburns", "Calms Irritated Skin",
-                      "Removes Tan", "Fights Acne", "Improves Skin Texture", "Provides Radiant Glow", "Exfoliates Dead Cells"
-                    ];
-                  } else {
-                    pool = [
-                      "Boosts Immunity", "Improves Digestion", "Rich in Iron", "Increases Energy",
-                      "Enhances Stamina", "Purifies Blood", "Supports Bone Health", "Improves Metabolism",
-                      "Rich in Antioxidants", "Relieves Stress", "Promotes Overall Wellness", "100% Natural Ingredients"
-                    ];
-                  }
-
-                  let benefits = [];
-                  if (pool.length <= 4) {
-                    benefits = [...pool];
-                  } else {
-                    const maxStartIndex = Math.max(1, pool.length - 4);
-                    const startIndex = idHash % maxStartIndex;
-                    const step = (idHash % 3) + 1;
-
-                    for (let i = 0; i < 4; i++) {
-                      benefits.push(pool[(startIndex + (i * step)) % pool.length]);
-                    }
-                  }
-
-                  return benefits.map((benefit, index) => (
-                    <span key={index} className="bento-tag">
-                      <CheckCircle size={12} weight="fill" />
-                      {benefit}
-                    </span>
-                  ));
-                })()}
-              </div>
-            </div>
-
-            {/* Bento Box 4: Delivery */}
-            <div className="pd-bento-cell bento-delivery">
-              <div className="pd-bento-header">
-                <Truck size={18} className="pd-bento-icon text-indigo" />
-                <h3>{t('deliveryCheck') || 'Delivery Check'}</h3>
-              </div>
-              <div className="bento-pincode-wrapper">
-                <input
-                  type="text"
-                  placeholder="Enter 6-digit PIN"
-                  value={pinCode}
-                  maxLength={6}
-                  onChange={(e) => {
-                    setPinCode(e.target.value.replace(/\D/g, '').slice(0, 6));
-                    if (pinError) setPinError('');
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault();
-                      handleVerifyPincode();
-                    }
-                  }}
-                  className="bento-input"
-                />
-                <button
-                  type="button"
-                  className="bento-btn"
-                  onClick={handleVerifyPincode}
-                  disabled={isCheckingPin || pinCode.length !== 6}
-                >
-                  {isCheckingPin ? '...' : 'Verify'}
-                </button>
-              </div>
-              {deliveryInfo && (
-                <p className="bento-delivery-msg success">
-                  ✓ Deliverable to {deliveryInfo.location || pinCode} ({deliveryInfo.timeline})
-                </p>
-              )}
-              {pinError && (
-                <p className="bento-delivery-msg error">
-                  {pinError}
-                </p>
+                  {reviews && reviews.length > 0 ? (
+                    <div className="pd-nike-reviews-cards">
+                      {reviews.slice(0, 4).map((r, i) => (
+                        <div key={i} className="pd-nike-review-item">
+                          <div className="rev-head">
+                            <strong>{r.user || r.name || 'Verified Buyer'}</strong>
+                            <div className="rev-stars">
+                              {[...Array(5)].map((_, si) => (
+                                <Star
+                                  key={si}
+                                  size={12}
+                                  fill={si < (r.rating || 5) ? "#111111" : "#e5e5e5"}
+                                  color={si < (r.rating || 5) ? "#111111" : "#e5e5e5"}
+                                />
+                              ))}
+                            </div>
+                          </div>
+                          {r.comment && <p className="rev-comment">{r.comment}</p>}
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="pd-nike-muted-text">No reviews yet. Be the first to review this product!</p>
+                  )}
+                </div>
               )}
             </div>
           </div>
-
         </div>
       </div>
-
-
 
       {/* Customer Write Review Modal */}
       {showReviewModal && (

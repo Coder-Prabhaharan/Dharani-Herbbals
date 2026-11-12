@@ -1459,8 +1459,7 @@
     width: 54%;
     background: #ffffff;
     overflow: hidden;
-    border-top-left-radius: 95px;
-    border-bottom-left-radius: 95px;
+    border-radius: 0 16px 16px 0;
     border-left: 2px solid rgba(46, 125, 50, 0.15);
     flex-shrink: 0;
   }
@@ -1476,7 +1475,7 @@
     box-sizing: border-box;
     object-fit: contain !important;
     object-position: center;
-    transform: scale(1.18) !important;
+    transform: none !important;
     transform-origin: center center;
     transition: transform 0.25s ease, filter 0.25s ease;
   }
@@ -1500,7 +1499,7 @@
 /* Padded catalog photos (Vallarai, Sirukurinjan, Pirandai flat-packet powders with 35% white margins) */
 /* Scale 1.65 fills the arch frame clearly with full readable detail, never tiny, zero cut off */
 .uc-img.uc-img-boost-fit {
-  transform: scale(1.65) !important;
+  transform: none !important;
   object-fit: contain !important;
   padding: 0 !important;
 }
@@ -1512,21 +1511,21 @@
 /* Wide landscape studio photos (herbal/1, 2, 3, 6, 7, 9, 10, 11 - Veliparuthi, Mudakathan, Tribala, etc.) */
 /* Cover + center crops the wide empty studio space on sides, scaling product up to fill height */
 .uc-img.uc-img-landscape-fit {
-  object-fit: cover !important;
+  object-fit: contain !important;
   object-position: center center !important;
-  transform: scale(1.12) !important;
+  transform: none !important;
   padding: 0 !important;
 }
 
 .uc-card:hover .uc-img.uc-img-landscape-fit {
-  transform: scale(1.18) !important;
+  transform: none !important;
 }
 
 /* Sprouted Multigrain Health Mix: ensures the wide box carton is 100% visible without clipping on the top-left curved arc */
 .uc-img.uc-img-multigrain-fit {
   object-fit: contain !important;
   object-position: right center !important;
-  transform: scale(0.96) !important;
+  transform: none !important;
   padding: 4px 6px 4px 22px !important;
 }
 
@@ -1770,7 +1769,7 @@
     padding: 2px 4px !important;
     width: 100%;
     height: 100%;
-    transform: scale(1.14) !important;
+    transform: none !important;
   }
 
   .shop-root .uc-img.uc-img-tight-fit,
@@ -1784,7 +1783,7 @@
   .shop-root .uc-img.uc-img-boost-fit,
   .shop-grid .uc-img.uc-img-boost-fit,
   .uc-img.uc-img-boost-fit {
-    transform: scale(1.55) !important;
+    transform: none !important;
     object-fit: contain !important;
     padding: 0 !important;
   }
@@ -1792,9 +1791,9 @@
   .shop-root .uc-img.uc-img-landscape-fit,
   .shop-grid .uc-img.uc-img-landscape-fit,
   .uc-img.uc-img-landscape-fit {
-    object-fit: cover !important;
+  object-fit: contain !important;
     object-position: center center !important;
-    transform: scale(1.08) !important;
+    transform: none !important;
     padding: 0 !important;
   }
 
@@ -1803,7 +1802,7 @@
   .uc-img.uc-img-multigrain-fit {
     object-fit: contain !important;
     object-position: right center !important;
-    transform: scale(0.94) !important;
+    transform: none !important;
     padding: 3px 4px 3px 20px !important;
   }
 
@@ -2198,7 +2197,7 @@
     object-position: center;
     width: 100%;
     height: 100%;
-    transform: scale(1.14) !important;
+    transform: none !important;
   }
 
   .shop-root .uc-img.uc-img-tight-fit,
@@ -2212,7 +2211,7 @@
   .shop-root .uc-img.uc-img-boost-fit,
   .shop-grid .uc-img.uc-img-boost-fit,
   .uc-img.uc-img-boost-fit {
-    transform: scale(1.55) !important;
+    transform: none !important;
     object-fit: contain !important;
     padding: 0 !important;
   }
@@ -2220,9 +2219,9 @@
   .shop-root .uc-img.uc-img-landscape-fit,
   .shop-grid .uc-img.uc-img-landscape-fit,
   .uc-img.uc-img-landscape-fit {
-    object-fit: cover !important;
+  object-fit: contain !important;
     object-position: center center !important;
-    transform: scale(1.08) !important;
+    transform: none !important;
     padding: 0 !important;
   }
 

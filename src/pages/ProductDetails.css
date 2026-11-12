@@ -275,8 +275,8 @@
 }
 
 .pd-pro-main-image.pd-img-zoom-fit {
-  transform: scale(1.15);
-  object-fit: cover;
+  transform: none;
+  object-fit: contain;
 }
 
 .pd-pro-main-image-container:hover .pd-pro-main-image {
@@ -3918,3 +3918,706 @@
   font-style: italic;
 }
 
+
+
+/* ==========================================================================
+   NIKE-INSPIRED ULTRA-CLEAN PRODUCT DETAILS LAYOUT
+   ========================================================================== */
+
+.pd-pro-container.pd-nike-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  gap: 56px;
+  align-items: start;
+  max-width: 1280px;
+  margin: 0 auto 60px auto;
+  padding: 0 16px;
+}
+
+/* Gallery Section (Vertical thumbs on left, Big main view on right) */
+.pd-nike-gallery-wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  align-items: flex-start;
+  position: sticky;
+  top: 90px;
+  z-index: 10;
+}
+
+.pd-nike-thumbs-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 64px;
+  flex-shrink: 0;
+  max-height: 560px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.pd-nike-thumb-btn {
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  border: 1.5px solid transparent;
+  background: #f6f6f6;
+  padding: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.pd-nike-thumb-btn img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+}
+
+.pd-nike-thumb-btn:hover {
+  border-color: #9ca3af;
+  background: #f0f0f0;
+}
+
+.pd-nike-thumb-btn.active {
+  border-color: #111111;
+  background: #ffffff;
+  box-shadow: 0 0 0 1.5px #111111;
+}
+
+.pd-pro-main-image-container.pd-nike-main-view {
+  flex: 1;
+  min-width: 0;
+  aspect-ratio: 1 / 1;
+  min-height: 480px;
+  max-height: 580px;
+  background: #f6f6f6;
+  border-radius: 14px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pd-pro-main-image-container.pd-nike-main-view .pd-pro-main-image-wrapper {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  box-sizing: border-box;
+}
+
+.pd-pro-main-image-container.pd-nike-main-view .pd-pro-main-image {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain !important;
+  mix-blend-mode: multiply;
+  transform: none !important;
+}
+
+/* Right Sidebar Information */
+.pd-pro-info.pd-nike-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-top: 4px;
+}
+
+.pd-nike-header-block {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pd-nike-category {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #c2410c; /* Nike vibrant accent style */
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.pd-nike-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111111;
+  line-height: 1.2;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.pd-nike-rating-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9rem;
+  margin-top: 4px;
+}
+
+.pd-nike-rating-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 700;
+  color: #111111;
+}
+
+.pd-nike-reviews-link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: #707072;
+  font-size: 0.88rem;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.pd-nike-dot {
+  color: #cbd5e1;
+}
+
+.pd-nike-write-review-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  color: #2e7d32;
+  font-weight: 600;
+  font-size: 0.88rem;
+  cursor: pointer;
+}
+
+/* Price block */
+.pd-nike-price-section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.pd-nike-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.pd-nike-price-main {
+  font-size: 1.65rem;
+  font-weight: 700;
+  color: #111111;
+}
+
+.pd-nike-pack-tag {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #4b5563;
+}
+
+.pd-nike-original-price {
+  font-size: 1.05rem;
+  color: #9ca3af;
+  text-decoration: line-through;
+}
+
+.pd-nike-discount-tag {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #15803d;
+  background: #dcfce7;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.pd-nike-tax-note {
+  font-size: 0.82rem;
+  color: #707072;
+  margin: 0;
+}
+
+/* Select Size / Pack (Clean Grid like Nike Shoe sizes) */
+.pd-nike-sizes-block {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pd-nike-sizes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pd-nike-sizes-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111111;
+}
+
+.pd-nike-stock-badge {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #15803d;
+  background: #f0fdf4;
+  padding: 3px 10px;
+  border-radius: 12px;
+  border: 1px solid #bbf7d0;
+}
+
+.pd-nike-sizes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 10px;
+}
+
+.pd-nike-size-pill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 8px;
+  background: #ffffff;
+  border: 1.5px solid #e5e5e5;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 52px;
+}
+
+.pd-nike-size-pill .size-name {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #111111;
+}
+
+.pd-nike-size-pill .size-price {
+  font-size: 0.78rem;
+  color: #707072;
+  margin-top: 2px;
+}
+
+.pd-nike-size-pill:hover {
+  border-color: #111111;
+}
+
+.pd-nike-size-pill.active {
+  border-color: #111111;
+  background: #ffffff;
+  box-shadow: 0 0 0 1.5px #111111;
+}
+
+.pd-nike-size-pill.active .size-name {
+  color: #111111;
+  font-weight: 700;
+}
+
+/* Call to Actions (Nike Signature full-width pill buttons) */
+.pd-nike-cta-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.pd-nike-qty-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 0;
+}
+
+.pd-nike-qty-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #111111;
+}
+
+.pd-nike-qty-picker {
+  display: inline-flex;
+  align-items: center;
+  border: 1.5px solid #e5e5e5;
+  border-radius: 24px;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.pd-nike-qty-picker button {
+  width: 38px;
+  height: 38px;
+  border: none;
+  background: #f9fafb;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #111111;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pd-nike-qty-picker button:hover {
+  background: #f1f5f9;
+}
+
+.pd-nike-qty-picker .qty-num {
+  width: 40px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #111111;
+}
+
+.pd-nike-btn-add {
+  width: 100%;
+  padding: 16px 24px;
+  background: #111111;
+  color: #ffffff;
+  border-radius: 36px;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.pd-nike-btn-add:hover {
+  background: #2b2b2b;
+}
+
+.pd-nike-btn-add:active {
+  transform: scale(0.98);
+}
+
+.pd-nike-btn-buy {
+  width: 100%;
+  padding: 16px 24px;
+  background: #2e7d32;
+  color: #ffffff;
+  border-radius: 36px;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+  box-shadow: 0 4px 12px rgba(46, 125, 50, 0.25);
+}
+
+.pd-nike-btn-buy:hover {
+  background: #256628;
+}
+
+.pd-nike-btn-buy:active {
+  transform: scale(0.98);
+}
+
+/* Sharing options */
+.pd-nike-share-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.pd-nike-share-item {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 14px;
+  border-radius: 24px;
+  border: 1px solid #e5e5e5;
+  background: #ffffff;
+  font-size: 0.84rem;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pd-nike-share-item:hover {
+  border-color: #111111;
+  color: #111111;
+}
+
+.pd-nike-share-item.copied {
+  background: #f0fdf4;
+  border-color: #86efac;
+  color: #16a34a;
+}
+
+/* Delivery card */
+.pd-nike-delivery-card {
+  background: #f9fafb;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.pd-nike-delivery-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #111111;
+}
+
+.pd-nike-pincode-input-wrap {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.pd-nike-pincode-input-wrap input {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1.5px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  background: #ffffff;
+}
+
+.pd-nike-pincode-input-wrap button {
+  padding: 10px 18px;
+  background: #111111;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.88rem;
+  cursor: pointer;
+}
+
+.pd-nike-delivery-success {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  font-size: 0.85rem;
+  color: #15803d;
+  font-weight: 500;
+}
+
+.pd-nike-delivery-error {
+  margin-top: 8px;
+  font-size: 0.84rem;
+  color: #dc2626;
+}
+
+.pd-nike-delivery-perk {
+  margin: 10px 0 0 0;
+  font-size: 0.82rem;
+  color: #6b7280;
+}
+
+/* Accordion sections */
+.pd-nike-accordion {
+  border-top: 1px solid #e5e5e5;
+  margin-top: 12px;
+}
+
+.pd-nike-accordion-item {
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.pd-nike-accordion-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 0;
+  background: none;
+  border: none;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #111111;
+  cursor: pointer;
+  text-align: left;
+}
+
+.pd-nike-accordion-header:hover {
+  color: #2e7d32;
+}
+
+.pd-nike-accordion-body {
+  padding-bottom: 20px;
+  color: #374151;
+  font-size: 0.92rem;
+  line-height: 1.65;
+}
+
+.pd-nike-desc-p {
+  margin: 0 0 10px 0;
+}
+
+.pd-nike-benefits-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pd-nike-benefit-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 0.92rem;
+}
+
+.pd-nike-ingredients-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pd-nike-ing-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #f0fdf4;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.pd-nike-muted-text {
+  color: #9ca3af;
+  font-size: 0.88rem;
+  margin: 0;
+}
+
+/* Reviews inside accordion */
+.pd-nike-reviews-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.pd-nike-stars-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pd-nike-score-text {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #111111;
+  margin-left: 6px;
+}
+
+.pd-nike-write-btn-outline {
+  padding: 8px 16px;
+  border: 1.5px solid #111111;
+  background: #ffffff;
+  color: #111111;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pd-nike-write-btn-outline:hover {
+  background: #111111;
+  color: #ffffff;
+}
+
+.pd-nike-reviews-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.pd-nike-review-item {
+  background: #f9fafb;
+  border-radius: 8px;
+  padding: 14px;
+}
+
+.pd-nike-review-item .rev-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.pd-nike-review-item .rev-head strong {
+  font-size: 0.9rem;
+  color: #111111;
+}
+
+.pd-nike-review-item .rev-stars {
+  display: flex;
+  gap: 2px;
+}
+
+.pd-nike-review-item .rev-comment {
+  margin: 0;
+  font-size: 0.88rem;
+  color: #4b5563;
+  line-height: 1.5;
+}
+
+/* Mobile Responsiveness for Nike Layout */
+@media (max-width: 960px) {
+  .pd-pro-container.pd-nike-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 0 12px;
+  }
+
+  .pd-nike-gallery-wrapper {
+    flex-direction: column-reverse;
+    position: static;
+    width: 100%;
+    gap: 12px;
+  }
+
+  .pd-nike-thumbs-vertical {
+    flex-direction: row;
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 6px;
+  }
+
+  .pd-pro-main-image-container.pd-nike-main-view {
+    width: 100%;
+    min-height: 320px;
+    max-height: 420px;
+  }
+
+  .pd-pro-info.pd-nike-sidebar {
+    width: 100%;
+    padding: 0;
+  }
+
+  .pd-nike-title {
+    font-size: 1.6rem;
+  }
+}

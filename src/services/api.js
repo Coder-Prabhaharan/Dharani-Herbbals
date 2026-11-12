@@ -14,12 +14,23 @@ export const resolveMediaUrl = (url) => {
   if (!trimmed) return '';
   if (trimmed.startsWith('data:') || trimmed.startsWith('blob:')) return trimmed;
 
-  // Rewrite dead or direct backend media URLs first so they route to our proxy /api/media/
-  if (trimmed.includes('api.codingboss.in/media/')) {
-    return trimmed.replace(/^https?:\/\/api\.codingboss\.in\/media\//i, '/api/media/');
+  // 1. Rewrite api.codingboss backend media URLs to active proxy /api/media/ (which maps to http://179.197.251.47:30080/media/)
+  if (trimmed.includes('api.codingboss')) {
+    if (trimmed.includes('/media/')) {
+      const mediaPath = trimmed.split(/\/media\//)[1];
+      return `/api/media/${mediaPath}`;
+    }
+    return trimmed.replace(/^https?:\/\/api\.codingboss\.[a-z0-9.]+\//i, 'http://179.197.251.47:30080/');
   }
+
+  // 2. Direct backend IP media URLs -> route to proxy /api/media/
   if (trimmed.includes('179.197.251.47:30080/media/')) {
-    return trimmed.replace(/^https?:\/\/179\.197\.251\.47:30080\/media\//i, '/api/media/');
+    const mediaPath = trimmed.split(/\/media\//)[1];
+    return `/api/media/${mediaPath}`;
+  }
+  if (trimmed.includes('179.197.251.47:30080')) {
+    return trimmed.replace(/^https?:\/\/179\.197\.251\.47:30080\/herbal/i, '/api')
+                  .replace(/^https?:\/\/179\.197\.251\.47:30080/i, '/api');
   }
 
   if (trimmed.startsWith('http://vedanmart.com/')) {
@@ -31,6 +42,7 @@ export const resolveMediaUrl = (url) => {
   if (trimmed.startsWith('http://dharaniherbbals.in/')) {
     return trimmed.replace('http://dharaniherbbals.in/', 'https://dharaniherbbals.in/');
   }
+
   // Handle backend anomaly: Django prepending MEDIA_URL to external URLs (e.g. /media/https%3A/...)
   if (trimmed.includes('/media/')) {
     const afterMedia = trimmed.split(/\/media\//)[1];
@@ -48,26 +60,19 @@ export const resolveMediaUrl = (url) => {
       return unwrapped;
     }
   }
+
   if (trimmed.startsWith('/media/')) {
     return `/api${trimmed}`;
   }
   if (trimmed.startsWith('media/')) {
     return `/api/${trimmed}`;
   }
-  if (trimmed.startsWith('https://')) {
+  if (trimmed.startsWith('https://') || trimmed.startsWith('http://')) {
     return trimmed;
   }
   if (trimmed.startsWith('/')) {
     return trimmed;
   }
-  if (trimmed.includes('179.197.251.47:30080/media/')) {
-    return trimmed.replace(/http:\/\/179\.197\.251\.47:30080\/media\//, '/api/media/');
-  }
-  if (trimmed.includes('api.codingboss.in/media/')) {
-    return trimmed.replace(/https?:\/\/api\.codingboss\.in\/media\//, '/api/media/');
-  }
-  if (trimmed.includes('179.197.251.47:30080')) {
-    return trimmed.replace('http://179.197.251.47:30080/herbal', '/api').replace('http://179.197.251.47:30080', '/api');
-  }
+
   return trimmed;
 };
