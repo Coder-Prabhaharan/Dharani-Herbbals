@@ -56,7 +56,7 @@ export default async function handler(req, res) {
   const { id } = req.query;
   const cleanId = String(id || '').replace(/[^0-9]/g, '');
 
-  const host = req.headers['x-forwarded-host'] || req.headers.host || 'dharani-herbals.vercel.app';
+  const host = req.headers['x-forwarded-host'] || req.headers.host || process.env.VERCEL_PROJECT_PRODUCTION_URL || process.env.VERCEL_URL || 'dharani-herbals.vercel.app';
   const proto = req.headers['x-forwarded-proto'] || 'https';
   const siteUrl = `${proto}://${host}`;
   const defaultLogo = `${siteUrl}/logo.png`;

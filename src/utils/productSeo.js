@@ -14,7 +14,11 @@
 import { getProductIngredients, getProductDescription } from '../data/productCatalogData.js';
 import { formatProductPackSize, formatVariationLabel, formatProductDisplayName } from './productFormatters.js';
 
-export const SITE_DOMAIN = (typeof process !== 'undefined' && (process.env.VITE_SITE_URL || (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : null))) || 'https://dharani-herbals.vercel.app';
+export const SITE_DOMAIN = (typeof process !== 'undefined' && (
+  process.env.VITE_SITE_URL || 
+  (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : null) ||
+  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null)
+)) || 'https://dharani-herbals.vercel.app';
 export const SITE_NAME = 'Dharani Herbals';
 
 /**

@@ -1482,7 +1482,7 @@
 
 .uc-card:hover .uc-img,
 .uc-card:hover .uc-img.uc-img-standard-fit {
-  transform: scale(1.24) !important;
+  transform: scale(1.03) !important;
 }
 
 /* Tight camera closeups (Keelanelli 4.jpeg, Chemparuthi Poo, etc.): 100% full, zero cropping */
@@ -1505,7 +1505,7 @@
 }
 
 .uc-card:hover .uc-img.uc-img-boost-fit {
-  transform: scale(1.72) !important;
+  transform: scale(1.03) !important;
 }
 
 /* Wide landscape studio photos (herbal/1, 2, 3, 6, 7, 9, 10, 11 - Veliparuthi, Mudakathan, Tribala, etc.) */

@@ -61,13 +61,9 @@ export function ProductsProvider({ children }) {
     const displayName = formatProductDisplayName(p.raw_name || p.name);
     const displayTamilName = formatProductDisplayName(p.raw_tamil_name || p.tamil_name || displayName);
 
-    const fallbackImg = getProductFallbackImage(p.raw_name || p.name, p.id) || getProductFallbackImage(displayName, p.id);
-    let resolvedImage = p.image;
-    if (p.id === 1255 || (displayName && displayName.toLowerCase().includes('chemparuthi herbal shampoo'))) {
-      resolvedImage = '/images/chemparuthi_herbal_shampoo.jpg';
-    } else if (p.id === 1246 || (displayName && displayName.toLowerCase().includes('arappu shampoo'))) {
-      resolvedImage = '/images/arappu_shampoo.jpg';
-    } else if (!resolvedImage || (typeof resolvedImage === 'string' && (resolvedImage.includes('Vaishnavi.jpeg') || resolvedImage.endsWith('/logo.png')))) {
+    let resolvedImage = p.image ? resolveMediaUrl(p.image) : '';
+    if (!resolvedImage || (typeof resolvedImage === 'string' && (resolvedImage.includes('Vaishnavi.jpeg') || resolvedImage.endsWith('/logo.png')))) {
+      const fallbackImg = getProductFallbackImage(p.raw_name || p.name, p.id) || getProductFallbackImage(displayName, p.id);
       resolvedImage = fallbackImg || resolvedImage;
     }
 
@@ -326,19 +322,13 @@ export function ProductsProvider({ children }) {
             badge: p.is_new ? 'NEW' : '',
             badgeColor: p.is_new ? 'green' : '',
             image: (() => {
-              const fallbackImg = getProductFallbackImage(p.name, p.id) || getProductFallbackImage(displayName, p.id);
-              if (p.id === 1255 || (displayName && displayName.toLowerCase().includes('chemparuthi herbal shampoo'))) {
-                return '/images/chemparuthi_herbal_shampoo.jpg';
-              }
-              if (p.id === 1246 || (displayName && displayName.toLowerCase().includes('arappu shampoo'))) {
-                return '/images/arappu_shampoo.jpg';
-              }
-              if (extraImagesMap[String(p.id)]) {
-                return extraImagesMap[String(p.id)];
-              }
               if (p.image && !p.image.includes('Vaishnavi.jpeg') && !p.image.endsWith('/logo.png')) {
                 return resolveMediaUrl(p.image);
               }
+              if (extraImagesMap && extraImagesMap[String(p.id)]) {
+                return extraImagesMap[String(p.id)];
+              }
+              const fallbackImg = getProductFallbackImage(p.name, p.id) || getProductFallbackImage(displayName, p.id);
               return fallbackImg || 'https://vedanmart.com/images/Food/WILD%20HONEYJAR(NR).jpg';
             })(),
             category_name: p.category_name,

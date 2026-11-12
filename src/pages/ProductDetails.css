@@ -887,16 +887,20 @@
 /* Responsive */
 @media (max-width: 900px) {
   .pd-pro-wrapper {
-    padding: 138px 0 50px;
+    padding: 116px 0 40px;
     overflow-x: hidden;
     width: 100%;
     background: #ffffff;
   }
 
   .pd-breadcrumbs {
-    padding: 0 16px;
-    margin-bottom: 8px;
+    padding: 0 14px;
+    margin-bottom: 10px;
     margin-top: 0;
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    white-space: nowrap;
+    scrollbar-width: none;
   }
 
   .pd-pro-container {
@@ -2701,7 +2705,7 @@
 
 @media (max-width: 900px) {
   .pd-pro-wrapper {
-    padding: 160px 14px 30px;
+    padding: 116px 14px 30px;
   }
   .pd-breadcrumbs {
     margin-bottom: 16px;

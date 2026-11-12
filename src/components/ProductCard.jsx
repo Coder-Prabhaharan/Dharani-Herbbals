@@ -56,20 +56,12 @@ export const ProductCard = memo(({ product, index = 0 }) => {
     }
   };
 
-  const isArappuShampoo = Number(product.id) === 1246 || (product.name && product.name.toLowerCase().includes('arappu shampoo'));
-  let displayImage = fallbackImg || 'https://vedanmart.com/images/Food/WILD%20HONEYJAR(NR).jpg';
-  if (product.id === 1255 || (product.name && product.name.toLowerCase().includes('chemparuthi herbal shampoo'))) {
-    displayImage = '/images/chemparuthi_herbal_shampoo.jpg';
-  } else if (isArappuShampoo) {
-    displayImage = '/images/arappu_shampoo.jpg';
-  } else if (product.image && typeof product.image === 'string' && !product.image.includes('Vaishnavi.jpeg') && !product.image.endsWith('/logo.png')) {
-    if (product.image.includes(',')) {
-      displayImage = product.image.split(',')[0].trim();
-    } else {
-      displayImage = product.image;
-    }
-    displayImage = resolveMediaUrl(displayImage) || fallbackImg || 'https://vedanmart.com/images/Food/WILD%20HONEYJAR(NR).jpg';
-  } else {
+  let displayImage = '';
+  if (product.image && typeof product.image === 'string' && !product.image.includes('Vaishnavi.jpeg') && !product.image.endsWith('/logo.png')) {
+    const firstImg = product.image.includes(',') ? product.image.split(',')[0].trim() : product.image.trim();
+    displayImage = resolveMediaUrl(firstImg);
+  }
+  if (!displayImage) {
     displayImage = fallbackImg || 'https://vedanmart.com/images/Food/WILD%20HONEYJAR(NR).jpg';
   }
 

@@ -325,8 +325,10 @@ function startMasterLoop() {
 export default function BrandLogoVideo({ className = '', variant = 'nav', ariaLabel = 'Dharani Herbbals logo' }) {
   const canvasRef = useRef(null);
   const [videoStarted, setVideoStarted] = useState(false);
+  const isMobile = typeof window !== 'undefined' && (variant === 'mobile-nav' || window.innerWidth <= 768);
 
   useEffect(() => {
+    if (isMobile) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -371,6 +373,28 @@ export default function BrandLogoVideo({ className = '', variant = 'nav', ariaLa
       observer.disconnect();
     };
   }, [variant]);
+
+  if (isMobile) {
+    return (
+      <span
+        className={`brand-logo-video-wrap brand-logo-video-wrap--${variant} ${className}`}
+        aria-label={ariaLabel}
+      >
+        <img
+          src={logo3dBright}
+          alt={ariaLabel}
+          className="brand-logo-poster"
+          style={{
+            opacity: 1,
+            visibility: 'visible',
+            width: '100%',
+            height: '100%',
+            objectFit: 'contain'
+          }}
+        />
+      </span>
+    );
+  }
 
   return (
     <span

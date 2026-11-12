@@ -91,7 +91,8 @@ function LazyVideoCard({ item, addToCart, navigate, actualProduct }) {
             loop
             playsInline
             webkit-playsinline="true"
-            preload="metadata"
+            preload="none"
+            loading="lazy"
             onPlaying={() => setVideoPlaying(true)}
             style={{
               position: 'absolute',
