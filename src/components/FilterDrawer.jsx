@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { X, ChevronDown, Check } from 'lucide-react';
 import './FilterDrawer.css';
 import { useLanguage } from '../context/LanguageContext';
-import { FILTER_CONFIG, matchesProductFilter } from '../utils/filterHelper';
+import { FILTER_CONFIG, matchesProductFilter, filterProductList } from '../utils/filterHelper';
 
 export default function FilterDrawer({ isOpen, onClose, selectedFilters, setSelectedFilters, products = [] }) {
   const { language } = useLanguage();
@@ -15,19 +15,23 @@ export default function FilterDrawer({ isOpen, onClose, selectedFilters, setSele
     setOpenAccordion(openAccordion === id ? null : id);
   };
 
-  // Compute product count per option from real product catalog
+  // Compute dynamic faceted product count per option based on active selections (Amazon/OLX style)
   const countsMap = useMemo(() => {
     const map = {};
     if (!products || products.length === 0) return map;
 
     FILTER_CONFIG.forEach(cat => {
+      const otherFilters = { ...localFilters };
+      delete otherFilters[cat.id];
+      const candidateProducts = filterProductList(products, otherFilters);
+
       cat.options.forEach(opt => {
         const key = `${cat.id}__${opt}`;
-        map[key] = products.filter(p => matchesProductFilter(p, cat.id, opt)).length;
+        map[key] = candidateProducts.filter(p => matchesProductFilter(p, cat.id, opt)).length;
       });
     });
     return map;
-  }, [products]);
+  }, [products, localFilters]);
 
   const handleCheckboxChange = (categoryId, option) => {
     setLocalFilters(prev => {

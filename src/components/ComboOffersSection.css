@@ -145,6 +145,36 @@
   border: 1px solid #e2e8f0;
 }
 
+.combo-bundle-header-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1.5px solid #e2e8f0;
+}
+
+.combo-bundle-title-col {
+  flex: 1;
+  min-width: 0;
+}
+
+.combo-bundle-main-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 4px 0 0 0;
+  line-height: 1.25;
+  letter-spacing: -0.3px;
+}
+
+@media (max-width: 768px) {
+  .combo-bundle-main-title {
+    font-size: 1.12rem;
+  }
+}
+
 .combo-formula-header {
   display: flex;
   align-items: center;

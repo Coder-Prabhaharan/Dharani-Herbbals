@@ -553,8 +553,7 @@ export default function Navbar() {
           <div className="mobile-auth-buttons">
             {user ? (
               <button 
-                className="btn-mobile-login" 
-                style={{ background: '#ef4444', border: 'none', color: 'white', cursor: 'pointer', fontFamily: 'inherit' }}
+                className="btn-mobile-auth btn-mobile-logout" 
                 onClick={() => {
                   localStorage.removeItem('user');
                   localStorage.removeItem('token');
@@ -566,10 +565,17 @@ export default function Navbar() {
                   toggleMobileMenu();
                 }}
               >
-                {t('logout')}
+                <LogOut size={18} />
+                <span>{t('logout')}</span>
               </button>
             ) : (
-              <button className="btn-mobile-login" style={{ border: 'none', background: 'none', color: '#15803d', fontWeight: 'bold' }} onClick={() => { toggleMobileMenu(); openLoginModal(); }}>{t('login')}</button>
+              <button 
+                className="btn-mobile-auth btn-mobile-login-cta" 
+                onClick={() => { toggleMobileMenu(); openLoginModal(); }}
+              >
+                <User size={18} />
+                <span>{t('login')}</span>
+              </button>
             )}
           </div>
         </div>

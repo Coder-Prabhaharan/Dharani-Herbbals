@@ -251,7 +251,7 @@ export const ProductCard = memo(({ product, index = 0 }) => {
       </div>
 
       <div className="uc-img-section">
-        {product.discount && !isArappuShampoo && (
+        {product.discount && (
           <span className="uc-discount-badge">{product.discount}</span>
         )}
         <button

@@ -1040,6 +1040,42 @@
   gap: 20px;
 }
 
+@media (max-width: 768px) {
+  .shop-filter-bar {
+    margin-top: 18px;
+    margin-bottom: 20px;
+    padding: 10px 14px;
+    border-radius: 18px;
+    gap: 12px;
+    background: #ffffff;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+    border: 1px solid rgba(0, 0, 0, 0.07);
+  }
+
+  .shop-filter-left {
+    background: #f8fafc;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 50px;
+    padding: 8px 14px;
+    font-size: 0.84rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  }
+
+  .shop-filter-left:active {
+    background: #f1f5f9;
+    transform: scale(0.96);
+  }
+
+  .shop-filter-label {
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: #1e293b;
+    letter-spacing: 0.4px;
+  }
+}
+
 .shop-filter-left {
   display: flex;
   align-items: center;

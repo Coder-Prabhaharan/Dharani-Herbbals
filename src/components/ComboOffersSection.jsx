@@ -106,10 +106,18 @@ export default function ComboOffersSection() {
                   {/* Left Column: Visual Product Formula & Value Highlight */}
                   <div className="combo-left-col">
                     <div className="combo-visual-formula">
-                      <div className="combo-formula-header">
-                        <span className="combo-formula-label">
-                          {language === 'ta' ? 'இணைக்கப்பட்டுள்ள பொருட்கள்' : 'Products in this Bundle'}
-                        </span>
+                      <div className="combo-bundle-header-top">
+                        <div className="combo-bundle-title-col">
+                          {bundle.tagline && (
+                            <div className="combo-tagline-eyebrow">
+                              <Sparkles size={13} />
+                              <span>{bundle.tagline}</span>
+                            </div>
+                          )}
+                          <h3 className="combo-bundle-main-title">
+                            {language === 'ta' && bundle.tamil_name ? bundle.tamil_name : bundle.name}
+                          </h3>
+                        </div>
                         <span className="combo-items-count-badge">
                           {bundle.enrichedItems.length} {language === 'ta' ? 'பொருட்கள்' : 'Items'}
                         </span>
@@ -170,17 +178,6 @@ export default function ComboOffersSection() {
 
                   {/* Right Column: Details, Pricing & Action */}
                   <div className="combo-details-pane">
-                    {bundle.tagline && (
-                      <div className="combo-tagline-eyebrow">
-                        <Sparkles size={13} />
-                        <span>{bundle.tagline}</span>
-                      </div>
-                    )}
-
-                    <h3 className="combo-title">
-                      {language === 'ta' && bundle.tamil_name ? bundle.tamil_name : bundle.name}
-                    </h3>
-                    
                     <p className="combo-description">{bundle.description}</p>
 
                     {/* Included Products Pills */}

@@ -108,7 +108,6 @@ export default function CategoryStrip() {
       });
     return () => {
       clearTimeout(timeoutId);
-      controller.abort();
     };
   }, []);
 

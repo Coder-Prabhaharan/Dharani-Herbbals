@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import { ChevronLeft, ChevronRight, ShoppingBag } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ShoppingBag, Play } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useProducts } from '../context/ProductsContext';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { formatProductDisplayName, formatCurrency } from '../utils/productFormatters';
+import { resolveMediaUrl } from '../services/api';
 import './ShoppableVideos.css';
 
 // Product images
@@ -33,6 +34,9 @@ function LazyVideoCard({ item, addToCart, navigate, actualProduct }) {
       ([entry]) => {
         if (entry.isIntersecting) {
           setHasLoaded(true);
+          if (videoRef.current && videoRef.current.paused) {
+            videoRef.current.play().then(() => setVideoPlaying(true)).catch(() => {});
+          }
         } else {
           if (videoRef.current) {
             videoRef.current.pause();
@@ -48,22 +52,14 @@ function LazyVideoCard({ item, addToCart, navigate, actualProduct }) {
     };
   }, []);
 
-  useEffect(() => {
-    const video = videoRef.current;
-    if (video && hasLoaded) {
-      video.defaultMuted = true;
-      video.muted = true;
-      video.play().then(() => setVideoPlaying(true)).catch(() => {});
-    }
-  }, [hasLoaded]);
+  const displayImg = (actualProduct && actualProduct.image) ? resolveMediaUrl(actualProduct.image) : item.productImg;
 
   return (
     <div className="sv-card ultra" ref={cardRef}>
       <div className="sv-video-bg">
-        {/* Subtle product background preview so card is never black while video is buffering */}
-        {item.productImg && (
+        {displayImg && (
           <img
-            src={item.productImg}
+            src={displayImg}
             alt={actualProduct?.name || item.title}
             className="sv-card-poster"
             style={{
@@ -72,10 +68,9 @@ function LazyVideoCard({ item, addToCart, navigate, actualProduct }) {
               width: '100%',
               height: '100%',
               objectFit: 'cover',
-              filter: 'brightness(0.65) blur(2px)',
-              transform: 'scale(1.08)',
+              filter: videoPlaying ? 'none' : 'brightness(0.85)',
               opacity: videoPlaying ? 0 : 1,
-              transition: 'opacity 0.4s ease',
+              transition: 'opacity 0.25s ease',
               zIndex: 0
             }}
           />
@@ -91,8 +86,7 @@ function LazyVideoCard({ item, addToCart, navigate, actualProduct }) {
             loop
             playsInline
             webkit-playsinline="true"
-            preload="none"
-            loading="lazy"
+            preload="metadata"
             onPlaying={() => setVideoPlaying(true)}
             style={{
               position: 'absolute',
@@ -107,6 +101,11 @@ function LazyVideoCard({ item, addToCart, navigate, actualProduct }) {
         )}
       </div>
 
+      <div className="sv-top-reel-badge">
+        <span className="sv-reel-dot"></span>
+        <span className="sv-reel-text">Reel</span>
+      </div>
+
       <div className="sv-gradient-overlay"></div>
 
       <div className="sv-glass-panel">
@@ -115,9 +114,9 @@ function LazyVideoCard({ item, addToCart, navigate, actualProduct }) {
           onClick={() => actualProduct && navigate(`/product/${actualProduct.id}`)}
           style={{ cursor: actualProduct ? 'pointer' : 'default' }}
         >
-          {item.productImg && (
+          {displayImg && (
             <img 
-              src={item.productImg} 
+              src={displayImg} 
               alt={actualProduct?.name || item.title} 
               className="sv-product-img" 
               loading="lazy" 
@@ -136,7 +135,7 @@ function LazyVideoCard({ item, addToCart, navigate, actualProduct }) {
           className="sv-buy-btn" 
           onClick={(e) => {
             e.stopPropagation();
-            addToCart(actualProduct || { id: item.id, name: item.title, price: item.price, image: item.productImg });
+            addToCart(actualProduct || { id: item.id, name: item.title, price: item.price, image: displayImg });
           }}
           aria-label="Add to Cart"
         >

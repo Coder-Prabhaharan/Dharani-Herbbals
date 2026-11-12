@@ -252,7 +252,6 @@ function Home() {
       });
     return () => {
       clearTimeout(timeoutId);
-      controller.abort();
     };
   }, []);
 
