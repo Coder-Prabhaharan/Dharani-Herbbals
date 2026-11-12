@@ -23,7 +23,9 @@ export default function ProductDetails() {
   const navigate = useNavigate();
   const { products, loading, getProductById } = useProducts();
   const { language, translateText, translateProduct, bulkProductNames, t } = useLanguage();
-  const product = (getProductById ? getProductById(id) : null) || products.find(p => p.id === parseInt(id));
+  const contextProduct = (getProductById ? getProductById(id) : null) || products.find(p => p.id === parseInt(id));
+  const [fetchedProduct, setFetchedProduct] = useState(null);
+  const product = contextProduct || fetchedProduct;
   const sliderRef = useRef(null);
   const trackRef = useRef(null);
   const thumbRefs = useRef([]);
@@ -355,6 +357,58 @@ export default function ProductDetails() {
   const [translatedName, setTranslatedName] = useState(product ? formatProductDisplayName(product.name) : '');
   const [translatedSubtitle, setTranslatedSubtitle] = useState(product ? product.subtitle : '');
   const [translatedDesc, setTranslatedDesc] = useState(product ? (getProductDescription(product) || product.description || defaultDesc) : '');
+
+  // If product is not in global context (e.g. newly created on backend), fetch directly by ID
+  useEffect(() => {
+    if (!contextProduct && id) {
+      const endpoints = [
+        `http://127.0.0.1:8000/herbal/products/${id}/`,
+        `${API_BASE_URL}/products/${id}/`
+      ];
+
+      let isMounted = true;
+      (async () => {
+        for (const url of endpoints) {
+          try {
+            const res = await fetch(url, { headers: { 'ngrok-skip-browser-warning': 'true' } });
+            if (res.ok) {
+              const data = await res.json();
+              const p = data.data || data;
+              if (p && p.id && isMounted) {
+                const priceNum = parseFloat(p.customer_price || p.price || p.mrp || 0);
+                const mrpNum = parseFloat(p.mrp || p.price || 0);
+                const resolvedImg = resolveMediaUrl(p.image) || getProductFallbackImage(p.name, p.id) || 'https://vedanmart.com/images/Food/WILD%20HONEYJAR(NR).jpg';
+                const formattedP = {
+                  ...p,
+                  name: formatProductDisplayName(p.name),
+                  raw_name: p.name,
+                  tamil_name: formatProductDisplayName(p.tamil_name || p.name),
+                  price: formatCurrency(priceNum),
+                  originalPrice: mrpNum > priceNum ? formatCurrency(mrpNum) : '',
+                  discount: mrpNum > priceNum ? `${Math.round(((mrpNum - priceNum) / mrpNum) * 100)}% OFF` : '',
+                  image: resolvedImg,
+                  extra_images: Array.isArray(p.extra_images) ? p.extra_images.map(img => resolveMediaUrl(img)).filter(Boolean) : [],
+                  category_name: p.category_name || (p.category === 7 ? 'Health & Wellness' : 'Herbal Care'),
+                  description: p.description || '',
+                  pack_size: formatProductPackSize(p) || '50g',
+                  rating: 5.0,
+                  reviews: 1,
+                  variations: Array.isArray(p.variations) ? p.variations : []
+                };
+                setFetchedProduct(formattedP);
+                setTranslatedName(formatProductDisplayName(formattedP.name));
+                setTranslatedSubtitle(formattedP.subtitle || '100% Authentic Botanical Care');
+                setTranslatedDesc(getProductDescription(formattedP) || formattedP.description || defaultDesc);
+                return;
+              }
+            }
+          } catch (e) {}
+        }
+      })();
+
+      return () => { isMounted = false; };
+    }
+  }, [id, contextProduct]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
