@@ -15,6 +15,22 @@ export default defineConfig({
       ignored: ['**/dist/**', '**/.git/**', '**/node_modules/**', '**/*.zip', '**/dist*/**']
     },
     proxy: {
+      '/herbal': {
+        target: 'http://179.197.251.47:30080',
+        changeOrigin: true,
+        secure: false,
+        headers: {
+          host: '179.197.251.47:30080'
+        }
+      },
+      '/media': {
+        target: 'http://179.197.251.47:30080',
+        changeOrigin: true,
+        secure: false,
+        headers: {
+          host: '179.197.251.47:30080'
+        }
+      },
       '/api/media': {
         target: 'http://179.197.251.47:30080',
         changeOrigin: true,

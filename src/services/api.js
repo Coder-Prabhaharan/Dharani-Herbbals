@@ -1,6 +1,6 @@
-export const API_BASE_URL = '/api';
-export const BASE_URL = '/api';
-export const NGROK_DOMAIN = '/api';
+export const API_BASE_URL = '/herbal';
+export const BASE_URL = '/herbal';
+export const NGROK_DOMAIN = '/herbal';
 export const getMyOrdersUrl = (userId) => `${API_BASE_URL}/my-orders/${userId}/`;
 export const SLIDERS_API_URL = `${API_BASE_URL}/sliders/`;
 

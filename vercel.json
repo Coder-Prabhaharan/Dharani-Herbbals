@@ -1,6 +1,14 @@
 {
   "rewrites": [
     {
+      "source": "/herbal/(.*)",
+      "destination": "/api/proxy?path=$1"
+    },
+    {
+      "source": "/herbal",
+      "destination": "/api/proxy?path="
+    },
+    {
       "source": "/api/og-image",
       "destination": "/api/og-image"
     },

@@ -365,7 +365,7 @@ export default function ProductDetails() {
 
     if (id) {
       // Fetch CRM product images for Product Gallery section
-      fetch(`${API_BASE_URL}/product-images/${id}/`, {
+      fetch(`${API_BASE_URL}/product-images/?product_id=${id}`, {
         headers: { 'ngrok-skip-browser-warning': 'true' }
       })
         .then(res => {

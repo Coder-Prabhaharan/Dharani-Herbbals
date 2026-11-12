@@ -100,7 +100,7 @@ export default function ProductAdLanding() {
     setReviewSummary(null);
 
     // Fetch CRM images
-    fetch(`${API_BASE_URL}/product-images/${productId}/`, {
+    fetch(`${API_BASE_URL}/product-images/?product_id=${productId}`, {
       headers: { 'ngrok-skip-browser-warning': 'true' }
     })
       .then(res => res.ok ? res.json() : null)
