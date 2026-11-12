@@ -40,10 +40,10 @@ export function ProductsProvider({ children }) {
           ['staff', 'store', 'store_member'].includes(role2) ||
           ['staff', 'store', 'store_member'].includes(type1) ||
           ['staff', 'store', 'store_member'].includes(type2);
-        if (isStoreMember) return 'dharani_products_cache_store_v5';
+        if (isStoreMember) return 'dharani_products_cache_store_v6';
       }
     } catch (e) { }
-    return 'dharani_products_cache_customer_v5';
+    return 'dharani_products_cache_customer_v6';
   };
 
   const transformProduct = (p) => {
@@ -171,6 +171,7 @@ export function ProductsProvider({ children }) {
           if (piRes && piRes.ok) {
             const piData = await piRes.json();
             const piList = Array.isArray(piData) ? piData : (piData.data || piData.results || []);
+            piList.sort((a, b) => (Number(a.id) || 0) - (Number(b.id) || 0));
             piList.forEach(pi => {
               const pId = String(pi.product_id || pi.product || '');
               if (pId && pi.is_active !== false) {
@@ -322,15 +323,33 @@ export function ProductsProvider({ children }) {
             badge: p.is_new ? 'NEW' : '',
             badgeColor: p.is_new ? 'green' : '',
             image: (() => {
-              if (p.image && !p.image.includes('Vaishnavi.jpeg') && !p.image.endsWith('/logo.png')) {
-                return resolveMediaUrl(p.image);
-              }
+              // 1. Highest priority: Fresh image uploaded from CRM via product-images API
               if (extraImagesMap && extraImagesMap[String(p.id)]) {
                 return extraImagesMap[String(p.id)];
               }
+              // 2. Fresh image in product extra_images array (uploaded in CRM Django admin)
+              if (Array.isArray(p.extra_images) && p.extra_images.length > 0) {
+                const crmExtra = p.extra_images.slice().reverse().find(img => img && typeof img === 'string' && (img.includes('/media/products/') || img.includes('api.codingboss') || img.includes('WhatsApp_Image')));
+                if (crmExtra) {
+                  return resolveMediaUrl(crmExtra);
+                }
+              }
+              // 3. Direct product image
+              if (p.image && !p.image.includes('Vaishnavi.jpeg') && !p.image.endsWith('/logo.png')) {
+                return resolveMediaUrl(p.image);
+              }
+              // 4. Any other extra image
+              if (Array.isArray(p.extra_images) && p.extra_images.length > 0) {
+                const firstExtra = p.extra_images.find(img => img && typeof img === 'string' && !img.includes('Vaishnavi.jpeg') && !img.endsWith('/logo.png'));
+                if (firstExtra) {
+                  return resolveMediaUrl(firstExtra);
+                }
+              }
+              // 5. Authentic fallback
               const fallbackImg = getProductFallbackImage(p.name, p.id) || getProductFallbackImage(displayName, p.id);
               return fallbackImg || 'https://vedanmart.com/images/Food/WILD%20HONEYJAR(NR).jpg';
             })(),
+            extra_images: Array.isArray(p.extra_images) ? p.extra_images.map(img => resolveMediaUrl(img)).filter(Boolean) : [],
             category_name: p.category_name,
             description: enhancedDescription || p.description,
             pack_size: normalizedPackSize,

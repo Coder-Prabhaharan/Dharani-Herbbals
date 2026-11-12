@@ -720,6 +720,9 @@ export function consolidateProducts(list) {
           item.image && !item.image.includes('Vaishnavi.jpeg') && !item.image.endsWith('/logo.png')) {
         primary.image = item.image;
       }
+      if (Array.isArray(item.extra_images) && item.extra_images.length > 0) {
+        primary.extra_images = Array.from(new Set([...(primary.extra_images || []), ...item.extra_images]));
+      }
     });
 
     // Sort variations by price ascending

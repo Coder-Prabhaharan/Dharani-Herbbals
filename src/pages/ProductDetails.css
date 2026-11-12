@@ -887,7 +887,7 @@
 /* Responsive */
 @media (max-width: 900px) {
   .pd-pro-wrapper {
-    padding: 116px 0 40px;
+    padding: calc(144px + env(safe-area-inset-top, 0px)) 0 40px;
     overflow-x: hidden;
     width: 100%;
     background: #ffffff;
@@ -2705,7 +2705,7 @@
 
 @media (max-width: 900px) {
   .pd-pro-wrapper {
-    padding: 116px 14px 30px;
+    padding: calc(144px + env(safe-area-inset-top, 0px)) 14px 30px;
   }
   .pd-breadcrumbs {
     margin-bottom: 16px;
@@ -4623,5 +4623,117 @@
 
   .pd-nike-title {
     font-size: 1.6rem;
+  }
+}
+
+/* Modern Back Button & Breadcrumbs */
+.pd-back-circle-btn {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #334155;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.pd-back-circle-btn:active {
+  transform: scale(0.92);
+  background: #f1f5f9;
+}
+
+.pd-breadcrumbs-track {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-width: 0;
+}
+
+.pd-breadcrumbs-track .separator {
+  margin: 0 4px;
+  color: #94a3b8;
+}
+
+.pd-nike-mobile-header {
+  display: none;
+}
+
+@media (max-width: 960px) {
+  .pd-breadcrumbs {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px !important;
+  }
+
+  .pd-breadcrumbs-track {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    white-space: nowrap;
+    scrollbar-width: none;
+    font-size: 0.84rem;
+  }
+
+  .pd-breadcrumbs-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .pd-nike-mobile-header {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 12px;
+    padding: 0 4px;
+    width: 100%;
+  }
+
+  .pd-nike-brand-cat-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .pd-nike-brand-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    background: #f1f5f9;
+    color: #0f172a;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    border-radius: 100px;
+    border: 1px solid #e2e8f0;
+  }
+
+  .pd-nike-mobile-header .pd-nike-category {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #15803d;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .pd-nike-mobile-title {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1.25;
+    margin: 2px 0 0 0;
+    letter-spacing: -0.3px;
+  }
+
+  /* In mobile view, hide the duplicate desktop header block */
+  .pd-pro-info.pd-nike-sidebar .pd-nike-header-block {
+    display: none;
   }
 }

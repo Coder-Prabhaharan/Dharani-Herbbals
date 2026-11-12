@@ -669,6 +669,15 @@ export default function ProductDetails() {
   }
 
   // 2. Extra gallery images from CRM come AFTER the primary product image
+  if (Array.isArray(product.extra_images) && product.extra_images.length > 0) {
+    product.extra_images.forEach(img => {
+      if (!img || img.includes('Vaishnavi.jpeg') || img.endsWith('/logo.png')) return;
+      const src = resolveMediaUrl(img);
+      if (src && !mediaItems.some(m => m.src === src)) {
+        mediaItems.push({ type: 'image', src, thumb: src });
+      }
+    });
+  }
   if (crmGalleryImages.length > 0) {
     crmGalleryImages.forEach(imgObj => {
       const raw = imgObj.image || imgObj.url;
@@ -863,23 +872,23 @@ export default function ProductDetails() {
     <div className="pd-pro-wrapper">
       {productSeo && <SeoHead {...productSeo} />}
       {/* Breadcrumbs & Back Button */}
-      <div className="pd-breadcrumbs" style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+      <div className="pd-breadcrumbs">
         <button
           type="button"
           onClick={() => navigate(-1)}
-          style={{ background: 'white', border: '1px solid #e2e8f0', borderRadius: '50%', width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#334155', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', flexShrink: 0 }}
+          className="pd-back-circle-btn"
           title="Go Back"
           aria-label="Go Back"
         >
           <ArrowLeft size={18} aria-hidden="true" />
         </button>
-        <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
+        <div className="pd-breadcrumbs-track">
           <Link to="/">{t('home')}</Link>
-          <span className="separator" style={{ margin: '0 8px' }}>/</span>
+          <span className="separator">/</span>
           {product.category_name && (
             <>
               <Link to={`/shop?category=${encodeURIComponent(product.category_name)}`}>{product.category_name}</Link>
-              <span className="separator" style={{ margin: '0 8px' }}>/</span>
+              <span className="separator">/</span>
             </>
           )}
           <span className="current">{translatedName}</span>
@@ -887,6 +896,29 @@ export default function ProductDetails() {
       </div>
 
       <div className="pd-pro-container pd-nike-layout">
+        {/* Mobile-Only Header Block: Brand, Category, Title & Rating above Image Gallery */}
+        <div className="pd-nike-mobile-header">
+          <div className="pd-nike-brand-cat-row">
+            {product.brand && (
+              <span className="pd-nike-brand-pill">{product.brand}</span>
+            )}
+            <span className="pd-nike-category">
+              {product.category_name || 'Herbal Care'} • 100% Botanical
+            </span>
+          </div>
+          <h1 className="pd-nike-mobile-title">{translatedName}</h1>
+          {hasValidReviews && (
+            <div className="pd-nike-rating-row" style={{ marginTop: '4px' }}>
+              <div className="pd-nike-rating-pill">
+                <Star size={13} fill="#111111" color="#111111" />
+                <span className="pd-nike-rating-val">{avgRating.toFixed(1)}</span>
+              </div>
+              <span className="pd-nike-reviews-link" style={{ fontSize: '0.82rem' }}>
+                ({reviews?.length || 4} Reviews)
+              </span>
+            </div>
+          )}
+        </div>
         {/* Left Column: Nike-style Media Gallery (Dual Column on Desktop) */}
         <div className="pd-nike-gallery-wrapper">
           {mediaItems.length > 1 && (
