@@ -244,6 +244,9 @@ return (
     onKeyDown={handleCardKeyDown}
     aria-label={`Open ${translatedName}`}
   >
+  
+   <div className="dh-product-image-container">
+
     {/* Product Image */}
     <div className="dh-product-image">
 
@@ -312,17 +315,12 @@ return (
       </span>
     </div>
 
+   </div>
+
     {/* Product Details */}
     <div className="dh-product-content">
 
       <div className="dh-product-meta">
-        <span className="dh-category">
-          <Leaf size={12} />
-          {language === 'ta'
-            ? (getCategoryDisplayName(product.category_name, 'ta') ||
-               product.category_name || 'மூலிகை')
-            : (product.category_name || 'Herbal Care')}
-        </span>
 
         <div className="dh-rating">
           <Star size={14} fill="#D69E36" color="#D69E36" />
@@ -331,6 +329,15 @@ return (
             ({displayReviews || '18'})
           </span>
         </div>
+
+        <span className="dh-category">
+          <Leaf size={12} />
+          {language === 'ta'
+            ? (getCategoryDisplayName(product.category_name, 'ta') ||
+               product.category_name || 'மூலிகை')
+            : (product.category_name || 'Herbal Care')}
+        </span>
+
       </div>
 
       {/* Product Name */}
@@ -354,6 +361,18 @@ return (
              'Natural herbal wellness formulation for daily vitality and well-being.')}
       </p>
 
+      <div>
+
+      {/* Price */}
+      <div className="dh-price-section">
+        <div className="dh-price">
+          <span className="dh-currency">₹</span>
+          <span className="dh-price-value">
+            {String(product.price || '').replace(/[^0-9.]/g, '')}
+          </span>
+        </div>
+      </div>
+      
       {/* Pack Size */}
       <div className="dh-pack-section">
         {cleanPack && (
@@ -370,16 +389,8 @@ return (
             </span>
           )}
       </div>
-
-      {/* Price */}
-      <div className="dh-price-section">
-        <div className="dh-price">
-          <span className="dh-currency">₹</span>
-          <span className="dh-price-value">
-            {String(product.price || '').replace(/[^0-9.]/g, '')}
-          </span>
-        </div>
       </div>
+
 
       {/* Add to Cart */}
       <button
