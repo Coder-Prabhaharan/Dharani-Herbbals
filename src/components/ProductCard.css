@@ -1,6 +1,7 @@
 
 /* =========================================
    DHARANI HERBALS - PREMIUM PRODUCT CARD
+   Complete Responsive CSS
 ========================================= */
 
 .dh-product-card {
@@ -21,13 +22,16 @@
   width: 100%;
   height: 100%;
   min-width: 0;
+  min-height: 0;
 
   background: #ffffff;
   border: 1.5px solid #d7ddd8;
-  border-radius: 20px;
+  border-radius: 18px;
   overflow: hidden;
 
   cursor: pointer;
+  font-family: inherit;
+  box-sizing: border-box;
 
   box-shadow:
     0 2px 5px rgba(0, 0, 0, 0.04),
@@ -39,11 +43,11 @@
     border-color 0.3s ease;
 
   -webkit-tap-highlight-color: transparent;
-  font-family: inherit;
-  box-sizing: border-box;
 }
 
-.dh-product-card * {
+.dh-product-card *,
+.dh-product-card *::before,
+.dh-product-card *::after {
   box-sizing: border-box;
 }
 
@@ -66,20 +70,29 @@
    PRODUCT IMAGE SECTION
 ========================================= */
 
-.dh-product-card .dh-product-image-container {
-  position: relative;
-  width: 100%;
-  flex-shrink: 0;
-}
-
 .dh-product-card .dh-product-image {
   position: relative;
+  display: block;
 
   width: 100%;
-  aspect-ratio: 1.43 / 1;
+  aspect-ratio: 1.15 / 1;
 
-  background: #f5f6f3;
+  flex: 0 0 auto;
+  min-height: 0;
+
+  background: #f7f8f5;
   border-bottom: 1px solid #e3e6e2;
+
+  overflow: hidden;
+}
+
+.dh-product-card .uc-img-section {
+  position: relative;
+  display: block;
+
+  width: 100%;
+  height: 100%;
+  min-height: 0;
 
   overflow: hidden;
 }
@@ -87,12 +100,18 @@
 .dh-product-card .dh-image-link {
   position: absolute;
   inset: 0;
+  z-index: 1;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  padding: 16px;
+  width: 100%;
+  height: 100%;
+
+  padding: 15px;
+
+  overflow: hidden;
 }
 
 .dh-product-card .dh-product-img {
@@ -100,8 +119,15 @@
 
   width: 100%;
   height: 100%;
+  max-width: 100%;
+  max-height: 100%;
 
   object-fit: contain;
+  object-position: center;
+
+  visibility: visible;
+  opacity: 1;
+
   mix-blend-mode: multiply;
 
   transition: transform 0.45s ease;
@@ -135,6 +161,7 @@
 .dh-product-card .uc-img-landscape-fit {
   object-fit: cover;
   transform: scale(1);
+
   border-radius: 10px;
   mix-blend-mode: normal;
 }
@@ -199,17 +226,18 @@
 
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .dh-product-card .dh-icon-btn {
-  width: 48px;
-  height: 48px;
+  width: 42px;
+  height: 42px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
+  flex-shrink: 0;
   padding: 0;
 
   background: #ffffff;
@@ -229,8 +257,8 @@
 }
 
 .dh-product-card .dh-icon-btn svg {
-  width: 21px;
-  height: 21px;
+  width: 19px;
+  height: 19px;
 }
 
 .dh-product-card .dh-icon-btn:hover {
@@ -240,12 +268,12 @@
   box-shadow: 0 5px 12px rgba(0, 0, 0, 0.12);
 }
 
-.dh-product-card .dh-icon-btn.active {
+.dh-product-card .dh-icon-btn.is-active {
   background: #fff0f0;
   border-color: #edcaca;
 }
 
-.dh-product-card .dh-icon-btn.shared {
+.dh-product-card .dh-icon-btn.is-shared {
   background: var(--dh-green-700);
   border-color: var(--dh-green-700);
   color: #ffffff;
@@ -258,60 +286,19 @@
 
 
 /* =========================================
-   NATURAL & HERBAL BADGE
-========================================= */
-
-.dh-product-card .dh-image-caption {
-  position: absolute;
-  right: 14px;
-  bottom: 14px;
-  left: auto;
-  z-index: 4;
-
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-
-  padding: 9px 14px;
-
-  background: #4a941d;
-  border: none;
-  border-radius: 9px;
-
-  color: #ffffff;
-
-  font-size: 0.88rem;
-  font-weight: 700;
-  letter-spacing: 0;
-
-  line-height: 1.2;
-  white-space: nowrap;
-
-  box-shadow: 0 3px 9px rgba(0, 0, 0, 0.12);
-
-  pointer-events: none;
-}
-
-.dh-product-card .dh-image-caption svg {
-  width: 18px;
-  height: 18px;
-  color: #ffffff;
-}
-
-
-/* =========================================
    PRODUCT CONTENT
 ========================================= */
 
 .dh-product-card .dh-product-content {
   display: flex;
   flex-direction: column;
-  flex: 1;
+
+  flex: 1 1 auto;
+  min-width: 0;
 
   gap: 10px;
 
-  padding: 16px 18px 18px;
+  padding: 15px 16px 16px;
 
   background: #ffffff;
 }
@@ -321,16 +308,16 @@
    RATING AND CATEGORY
 ========================================= */
 
-.dh-product-card .dh-product-meta {
+.dh-product-card .uc-meta-top-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
 
   gap: 8px;
+
   width: 100%;
   min-width: 0;
 }
-
 
 /* Rating */
 
@@ -342,7 +329,7 @@
 
   flex-shrink: 0;
 
-  padding: 8px 11px;
+  padding: 7px 9px;
 
   background: #078c80;
   border: none;
@@ -350,43 +337,43 @@
 
   color: #ffffff;
 
-  font-size: 0.92rem;
+  font-size: 0.85rem;
   font-weight: 700;
   line-height: 1;
+  white-space: nowrap;
 }
 
 .dh-product-card .dh-rating svg {
-  width: 15px;
-  height: 15px;
+  width: 14px;
+  height: 14px;
 
   color: #ffffff !important;
   flex-shrink: 0;
 }
 
 .dh-product-card .dh-reviews {
-  color: #68716b;
+  color: #ffffff;
 
-  font-size: 0.85rem;
+  font-size: 0.76rem;
   font-weight: 500;
 
-  margin-left: 3px;
+  margin-left: 2px;
 }
 
-
-/* Product Category - Centered and Visible */
+/* Category */
 
 .dh-product-card .dh-category {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 5px;
 
   width: fit-content;
   max-width: 58%;
   min-width: 0;
-  min-height: 38px;
+  min-height: 34px;
 
-  padding: 7px 10px;
+  padding: 6px 9px;
 
   background: #ffffff;
   border: 1.5px solid #286347;
@@ -394,7 +381,7 @@
 
   color: #286347;
 
-  font-size: 0.72rem;
+  font-size: 0.69rem;
   font-weight: 700;
   letter-spacing: 0.01em;
 
@@ -405,13 +392,11 @@
   line-height: 1.25;
 
   overflow-wrap: anywhere;
-  text-overflow: clip;
 }
 
 .dh-product-card .dh-category svg {
-  width: 16px;
-  height: 16px;
-
+  width: 14px;
+  height: 14px;
   flex-shrink: 0;
 }
 
@@ -423,11 +408,13 @@
 .dh-product-card .dh-product-title {
   margin: 0;
 
-  font-size: 1.2rem;
+  color: #202720;
+
+  font-size: 1.12rem;
   font-weight: 750;
   line-height: 1.3;
 
-  min-height: 0;
+  min-height: 2.6em;
 
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -455,13 +442,13 @@
 .dh-product-card .dh-product-description {
   margin: 0;
 
-  color: #454c47;
+  color: #68716b;
 
-  font-size: 0.94rem;
+  font-size: 0.86rem;
   font-weight: 400;
   line-height: 1.45;
 
-  min-height: 0;
+  min-height: 2.9em;
 
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -475,57 +462,56 @@
    PRICE AND PACK SIZE ROW
 ========================================= */
 
-.dh-product-card .dh-product-content > div:has(> .dh-price-section) {
+.dh-product-card .uc-price-row-ml {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+
   flex-wrap: wrap;
+  gap: 8px;
 
-  gap: 8px 12px;
+  width: 100%;
+  min-width: 0;
+
+  margin-top: auto;
 }
-
 
 /* Price */
-
-.dh-product-card .dh-price-section {
-  display: inline-flex;
-  align-items: baseline;
-
-  margin: 0;
-}
 
 .dh-product-card .dh-price {
   display: inline-flex;
   align-items: baseline;
   gap: 2px;
 
+  flex-shrink: 0;
+
   color: #242924;
 }
 
 .dh-product-card .dh-currency {
-  font-size: 1.35rem;
+  font-size: 1.25rem;
   font-weight: 750;
 }
 
 .dh-product-card .dh-price-value {
-  font-size: 1.85rem;
+  font-size: 1.7rem;
   font-weight: 800;
   line-height: 1.1;
 
   letter-spacing: -0.04em;
 }
 
-
 /* Pack Size */
 
 .dh-product-card .dh-pack-section {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
+
   flex-wrap: wrap;
+  gap: 6px;
 
-  gap: 8px;
-
-  min-height: 0;
-
+  min-width: 0;
   margin: 0;
   padding: 0;
 
@@ -537,7 +523,7 @@
   align-items: center;
   justify-content: center;
 
-  padding: 6px 10px;
+  padding: 5px 9px;
 
   background: #ffffff;
   border: 1px solid #cfd5d0;
@@ -545,17 +531,20 @@
 
   color: #333d35;
 
-  font-size: 0.85rem;
-  font-weight: 500;
+  font-size: 0.78rem;
+  font-weight: 600;
+
+  white-space: nowrap;
 }
 
 .dh-product-card .dh-mrp {
   color: #929b94;
 
-  font-size: 0.88rem;
+  font-size: 0.82rem;
   font-weight: 500;
 
   text-decoration: line-through;
+  white-space: nowrap;
 }
 
 
@@ -571,28 +560,27 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 9px;
 
   width: 100%;
-  min-height: 50px;
+  min-height: 46px;
+  flex-shrink: 0;
 
-  margin-top: auto;
-  padding: 12px 16px;
+  margin-top: 5px;
+  padding: 11px 14px;
 
   background: #ffffff;
 
   border: 1.8px solid #b28a43;
-  border-radius: 10px;
+  border-radius: 9px;
 
   color: #94702f;
 
-  font-size: 1.05rem;
+  font-size: 0.95rem;
   font-weight: 750;
   letter-spacing: 0.01em;
 
   cursor: pointer;
-
-  box-shadow: none;
 
   transition:
     color 0.3s ease,
@@ -602,8 +590,7 @@
     box-shadow 0.3s ease;
 }
 
-
-/* Animated Green Background */
+/* Animated Background */
 
 .dh-product-card .dh-cart-btn::before {
   content: "";
@@ -624,31 +611,34 @@
   transition: transform 0.35s ease;
 }
 
-
 /* Button Icon */
 
 .dh-product-card .dh-cart-btn svg {
-  width: 21px;
-  height: 21px;
+  width: 19px;
+  height: 19px;
 
   flex-shrink: 0;
 
   transition: transform 0.3s ease;
 }
 
+/* Button Text */
 
-/* Button Hover */
+.dh-product-card .dh-cart-btn span {
+  position: relative;
+  z-index: 1;
+}
+
+/* Hover */
 
 .dh-product-card .dh-cart-btn:hover {
   color: #ffffff;
-
   background: #286347;
   border-color: #286347;
 
-  transform: translateY(-3px);
+  transform: translateY(-2px);
 
-  box-shadow:
-    0 6px 16px rgba(40, 99, 71, 0.25);
+  box-shadow: 0 6px 16px rgba(40, 99, 71, 0.25);
 }
 
 .dh-product-card .dh-cart-btn:hover::before {
@@ -659,32 +649,29 @@
   transform: translateY(-2px) scale(1.1);
 }
 
-
-/* Button Click */
+/* Click */
 
 .dh-product-card .dh-cart-btn:active {
   transform: translateY(0) scale(0.97);
   box-shadow: none;
 }
 
-
-/* Button Focus */
+/* Focus */
 
 .dh-product-card .dh-cart-btn:focus-visible {
   outline: 3px solid var(--dh-gold);
   outline-offset: 3px;
 }
 
+/* Added */
 
-/* Added to Cart */
-
-.dh-product-card .dh-cart-btn.added {
+.dh-product-card .dh-cart-btn.is-added {
   background: #286347;
   border-color: #286347;
   color: #ffffff;
 }
 
-.dh-product-card .dh-cart-btn.added::before {
+.dh-product-card .dh-cart-btn.is-added::before {
   display: none;
 }
 
@@ -696,34 +683,42 @@
 @media (max-width: 1100px) {
 
   .dh-product-card {
-    border-radius: 17px;
+    border-radius: 16px;
+  }
+
+  .dh-product-card .dh-product-image {
+    aspect-ratio: 1.1 / 1;
   }
 
   .dh-product-card .dh-product-content {
-    padding: 14px;
+    padding: 13px;
     gap: 9px;
   }
 
   .dh-product-card .dh-product-title {
-    font-size: 1.05rem;
+    font-size: 1.02rem;
   }
 
   .dh-product-card .dh-product-description {
-    font-size: 0.85rem;
+    font-size: 0.82rem;
   }
 
   .dh-product-card .dh-price-value {
-    font-size: 1.55rem;
+    font-size: 1.5rem;
   }
 
   .dh-product-card .dh-icon-btn {
-    width: 42px;
-    height: 42px;
+    width: 38px;
+    height: 38px;
   }
 
-  .dh-product-card .dh-image-caption {
-    font-size: 0.76rem;
-    padding: 8px 10px;
+  .dh-product-card .dh-icon-btn svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  .dh-product-card .dh-cart-btn {
+    font-size: 0.88rem;
   }
 }
 
@@ -735,11 +730,11 @@
 @media (max-width: 768px) {
 
   .dh-product-card {
-    border-radius: 15px;
+    border-radius: 14px;
   }
 
   .dh-product-card .dh-product-image {
-    aspect-ratio: 1.2 / 1;
+    aspect-ratio: 1.15 / 1;
   }
 
   .dh-product-card .dh-image-link {
@@ -747,17 +742,17 @@
   }
 
   .dh-product-card .dh-product-content {
-    padding: 12px;
+    padding: 11px;
     gap: 8px;
   }
 
-  .dh-product-card .dh-product-meta {
+  .dh-product-card .uc-meta-top-row {
     gap: 5px;
   }
 
   .dh-product-card .dh-rating {
-    padding: 6px 8px;
-    font-size: 0.78rem;
+    padding: 6px 7px;
+    font-size: 0.76rem;
   }
 
   .dh-product-card .dh-rating svg {
@@ -766,84 +761,73 @@
   }
 
   .dh-product-card .dh-reviews {
-    font-size: 0.7rem;
+    font-size: 0.68rem;
   }
 
   .dh-product-card .dh-category {
     max-width: 60%;
-    min-height: 34px;
+    min-height: 31px;
 
-    padding: 6px 8px;
+    padding: 5px 7px;
 
-    font-size: 0.65rem;
+    font-size: 0.63rem;
     gap: 4px;
   }
 
   .dh-product-card .dh-category svg {
-    width: 13px;
-    height: 13px;
+    width: 12px;
+    height: 12px;
   }
 
   .dh-product-card .dh-product-title {
-    font-size: 0.95rem;
+    font-size: 0.94rem;
     line-height: 1.3;
   }
 
   .dh-product-card .dh-product-description {
-    font-size: 0.78rem;
+    font-size: 0.77rem;
     line-height: 1.4;
   }
 
   .dh-product-card .dh-price-value {
-    font-size: 1.4rem;
+    font-size: 1.35rem;
   }
 
   .dh-product-card .dh-currency {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
   }
 
   .dh-product-card .dh-pack-size {
-    font-size: 0.72rem;
+    font-size: 0.7rem;
     padding: 5px 7px;
   }
 
-  .dh-product-card .dh-cart-btn {
-    min-height: 43px;
-    padding: 9px 10px;
+  .dh-product-card .dh-mrp {
+    font-size: 0.72rem;
+  }
 
-    font-size: 0.85rem;
+  .dh-product-card .dh-cart-btn {
+    min-height: 42px;
+    padding: 9px 8px;
+
+    font-size: 0.82rem;
     border-radius: 8px;
   }
 
   .dh-product-card .dh-icon-btn {
-    width: 35px;
-    height: 35px;
+    width: 34px;
+    height: 34px;
   }
 
   .dh-product-card .dh-icon-btn svg {
-    width: 17px;
-    height: 17px;
+    width: 16px;
+    height: 16px;
   }
 
   .dh-product-card .dh-product-actions {
     top: 9px;
     right: 9px;
-    gap: 8px;
-  }
-
-  .dh-product-card .dh-image-caption {
-    right: 8px;
-    bottom: 8px;
-
-    padding: 6px 8px;
-
-    font-size: 0.65rem;
-    gap: 4px;
-  }
-
-  .dh-product-card .dh-image-caption svg {
-    width: 14px;
-    height: 14px;
+    gap: 7px;
   }
 }
 
@@ -871,74 +855,83 @@
     display: none;
   }
 
-  .dh-product-card .dh-image-caption {
-    display: none;
-  }
-
   .dh-product-card .dh-product-title {
     font-size: 0.86rem;
+    min-height: 2.5em;
   }
 
   .dh-product-card .dh-rating {
     padding: 5px 6px;
-    font-size: 0.7rem;
+    font-size: 0.68rem;
     gap: 3px;
   }
 
   .dh-product-card .dh-reviews {
-    font-size: 0.65rem;
+    font-size: 0.62rem;
   }
 
   .dh-product-card .dh-category {
     max-width: 58%;
-    min-height: 30px;
+    min-height: 29px;
 
-    padding: 5px 6px;
+    padding: 4px 5px;
 
-    font-size: 0.58rem;
-    gap: 4px;
+    font-size: 0.56rem;
+    gap: 3px;
   }
 
   .dh-product-card .dh-category svg {
-    width: 12px;
-    height: 12px;
+    width: 11px;
+    height: 11px;
   }
 
   .dh-product-card .dh-price-value {
-    font-size: 1.25rem;
+    font-size: 1.18rem;
   }
 
   .dh-product-card .dh-currency {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
   }
 
   .dh-product-card .dh-pack-size {
+    font-size: 0.63rem;
+    padding: 4px 5px;
+  }
+
+  .dh-product-card .dh-mrp {
     font-size: 0.65rem;
-    padding: 4px 6px;
+  }
+
+  .dh-product-card .uc-price-row-ml {
+    gap: 5px;
+  }
+
+  .dh-product-card .dh-pack-section {
+    gap: 4px;
   }
 
   .dh-product-card .dh-cart-btn {
-    min-height: 40px;
+    min-height: 39px;
 
-    font-size: 0.78rem;
+    font-size: 0.75rem;
     gap: 5px;
 
     padding: 7px 5px;
   }
 
   .dh-product-card .dh-cart-btn svg {
-    width: 16px;
-    height: 16px;
+    width: 15px;
+    height: 15px;
   }
 
   .dh-product-card .dh-icon-btn {
-    width: 30px;
-    height: 30px;
+    width: 29px;
+    height: 29px;
   }
 
   .dh-product-card .dh-icon-btn svg {
-    width: 15px;
-    height: 15px;
+    width: 14px;
+    height: 14px;
   }
 
   .dh-product-card .dh-product-actions {
@@ -948,7 +941,7 @@
 
 
 /* =========================================
-   SHOP GRID
+   SHOP PRODUCT GRID
 ========================================= */
 
 div.shop-grid {
@@ -957,7 +950,7 @@ div.shop-grid {
   grid-template-columns: repeat(4, minmax(0, 1fr));
   grid-auto-rows: 1fr;
 
-  gap: 24px;
+  gap: 22px;
 
   width: 100%;
   max-width: 1280px;
@@ -974,13 +967,18 @@ div.shop-grid > * {
   height: 100%;
 }
 
+div.shop-grid .dh-product-card {
+  width: 100%;
+  height: 100%;
+}
+
 
 /* Large Desktop */
 
 @media (min-width: 1440px) {
 
   div.shop-grid {
-    gap: 28px;
+    gap: 26px;
   }
 }
 
@@ -991,7 +989,7 @@ div.shop-grid > * {
 
   div.shop-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 20px;
+    gap: 18px;
   }
 }
 
@@ -1002,7 +1000,7 @@ div.shop-grid > * {
 
   div.shop-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 18px;
+    gap: 16px;
   }
 }
 
@@ -1043,15 +1041,18 @@ div.shop-grid > * {
   .dh-product-card .dh-cart-btn:hover {
     transform: none;
     box-shadow: none;
+
+    color: #94702f;
+    background: #ffffff;
+    border-color: #b28a43;
   }
 
   .dh-product-card .dh-cart-btn:hover::before {
     transform: scaleX(0);
   }
 
-  .dh-product-card .dh-cart-btn:hover {
-    color: #94702f;
-    border-color: #b28a43;
+  .dh-product-card .dh-cart-btn:hover svg {
+    transform: none;
   }
 }
 

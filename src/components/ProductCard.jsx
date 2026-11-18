@@ -236,187 +236,189 @@ export const ProductCard = memo(({ product, index = 0 }) => {
 
   
 return (
-  <article
-    className="dh-product-card"
-    role="link"
-    tabIndex={0}
-    onClick={openProduct}
-    onKeyDown={handleCardKeyDown}
-    aria-label={`Open ${translatedName}`}
-  >
-  
-   <div className="dh-product-image-container">
-
-    {/* Product Image */}
-    <div className="dh-product-image">
-
-      {discountLabel && (
-        <span className="dh-discount">
-          {discountLabel}
-        </span>
-      )}
-
-      <div className="dh-product-actions">
-        <button
-          type="button"
-          className={`dh-icon-btn ${isInWishlist(product.id) ? 'active' : ''}`}
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            toggleWishlist(product);
-          }}
-          aria-label="Toggle wishlist"
-        >
-          <Heart
-            size={18}
-            fill={isInWishlist(product.id) ? "#B54747" : "none"}
-            color={isInWishlist(product.id) ? "#B54747" : "#315C42"}
-          />
-        </button>
-
-        <button
-          type="button"
-          className={`dh-icon-btn ${isShared ? 'shared' : ''}`}
-          onClick={handleShare}
-          aria-label="Share product"
-        >
-          {isShared
-            ? <Check size={18} />
-            : <Share2 size={18} />
-          }
-        </button>
-      </div>
-
-      <Link
-        to={`/product/${product.id}`}
-        className="dh-image-link"
-        onClick={() =>
-          sessionStorage.setItem('shopScrollPos', window.scrollY)
-        }
-        aria-label={translatedName}
-      >
-        <img
-          src={displayImage}
-          alt={translatedName}
-          className={`dh-product-img ${imageFitClass}`}
-          loading={isAboveFold ? "eager" : "lazy"}
-          fetchPriority={isAboveFold ? "high" : "auto"}
-          decoding={isAboveFold ? "sync" : "async"}
-          width="220"
-          height="220"
-          onError={handleImageError}
-          referrerPolicy="no-referrer"
-        />
-      </Link>
-
-      <span className="dh-image-caption">
-        <Leaf size={13} />
-        Natural & Herbal
-      </span>
-    </div>
-
-   </div>
-
-    {/* Product Details */}
-    <div className="dh-product-content">
-
-      <div className="dh-product-meta">
-
-        <div className="dh-rating">
-          <Star size={14} fill="#D69E36" color="#D69E36" />
-          <span>{displayRating || '4.8'}</span>
-          <span className="dh-reviews">
-            ({displayReviews || '18'})
-          </span>
-        </div>
-
-        <span className="dh-category">
-          <Leaf size={12} />
-          {language === 'ta'
-            ? (getCategoryDisplayName(product.category_name, 'ta') ||
-               product.category_name || 'மூலிகை')
-            : (product.category_name || 'Herbal Care')}
-        </span>
-
-      </div>
-
-      {/* Product Name */}
-      <h3 className="dh-product-title">
-        <Link
-          to={`/product/${product.id}`}
-          onClick={(e) => {
-            e.stopPropagation();
-            sessionStorage.setItem('shopScrollPos', window.scrollY);
-          }}
-        >
-          {translatedName}
-        </Link>
-      </h3>
-
-      {/* Product Description */}
-      <p className="dh-product-description">
-        {language === 'ta' && product.tamil_description
-          ? product.tamil_description
-          : (product.description ||
-             'Natural herbal wellness formulation for daily vitality and well-being.')}
-      </p>
-
-      <div>
-
-      {/* Price */}
-      <div className="dh-price-section">
-        <div className="dh-price">
-          <span className="dh-currency">₹</span>
-          <span className="dh-price-value">
-            {String(product.price || '').replace(/[^0-9.]/g, '')}
-          </span>
-        </div>
-      </div>
-      
-      {/* Pack Size */}
-      <div className="dh-pack-section">
-        {cleanPack && (
-          <span className="dh-pack-size">
-            {cleanPack}
-          </span>
-        )}
-
-        {product.mrp &&
-          parseFloat(product.mrp) >
-          parseFloat(String(product.price).replace(/[^0-9.]/g, '')) && (
-            <span className="dh-mrp">
-              {formatCurrency(product.mrp)}
-            </span>
+    <div
+      className="dh-product-card"
+      role="link"
+      tabIndex={0}
+      onClick={openProduct}
+      onKeyDown={handleCardKeyDown}
+      aria-label={`Open ${translatedName}`}
+    >
+      <div className="dh-product-image">
+        {/* 1. Top Image Section */}
+        <div className="uc-img-section">
+          {discountLabel && (
+            <span className="dh-discount">{discountLabel}</span>
           )}
+
+          <div className="dh-product-actions">
+            <button
+              type="button"
+              className={`dh-icon-btn ${isInWishlist(product.id) ? "is-active" : ""}`}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                toggleWishlist(product);
+              }}
+              aria-label={
+                isInWishlist(product.id)
+                  ? `Remove ${translatedName} from Wishlist`
+                  : `Add ${translatedName} to Wishlist`
+              }
+            >
+              <Heart
+                size={18}
+               fill={isInWishlist(product.id) ? "#B54747" : "none"}
+               color={isInWishlist(product.id) ? "#B54747" : "#315C42"}
+              />
+            </button>
+
+            {/* Share Button (Outside on Card) */}
+            <button
+              type="button"
+              className={`dh-icon-btn ${isShared ? "is-shared" : ""}`}
+              onClick={handleShare}
+              title={
+                isShared
+                  ? language === "ta"
+                    ? "இணைப்பு நகலெடுக்கப்பட்டது!"
+                    : "Link copied!"
+                  : language === "ta"
+                    ? "பகிர்"
+                    : "Share product"
+              }
+              aria-label={language === "ta" ? "பகிர்" : "Share product"}
+            >
+              {isShared ? (
+                <Check size={18} />
+              ) : (
+                <Share2 size={18}/>
+              )}
+            </button>
+          </div>
+
+          <Link
+            to={`/product/${product.id}`}
+            className="dh-image-link"
+            onClick={() =>
+              sessionStorage.setItem("shopScrollPos", window.scrollY)
+            }
+            aria-label={translatedName}
+          >
+            <img
+              src={displayImage}
+              alt={`${translatedName} - ${product.category_name || "Herbal Product"} by Dharani Herbals`}
+              className={`dh-product-img ${imageFitClass}`}
+              loading={isAboveFold ? "eager" : "lazy"}
+              fetchPriority={isAboveFold ? "high" : "auto"}
+              decoding={isAboveFold ? "sync" : "async"}
+              width="220"
+              height="220"
+              onError={handleImageError}
+              referrerPolicy="no-referrer"
+            />
+          </Link>
+        </div>
       </div>
+
+      {/* 2. Middle Content Section */}
+      <div className="dh-product-content">
+        {/* Category Pill on left & Star Rating on right */}
+          <div className="uc-meta-top-row">
+           
+            <div className="dh-rating">
+              <Star size={14} fill="#D69E36" color="#D69E36" />
+              <span>{displayRating || '4.8'}</span>
+              <span className="dh-reviews">
+              ({displayReviews || '18'})
+             </span>
+            </div>
+
+             <span className="dh-category">
+              <Leaf size={12} />
+        
+                {language === "ta"
+                  ? getCategoryDisplayName(product.category_name, "ta") ||
+                    product.category_name ||
+                    "மூலிகை"
+                  : product.category_name || "Herbal Care"}
+              
+            </span>
+          </div>
+    
+
+        {/* Product Title */}
+        <h3 className="dh-product-title">
+          <Link
+            to={`/product/${product.id}`}
+            onClick={(e) => {
+              e.stopPropagation();
+              sessionStorage.setItem("shopScrollPos", window.scrollY);
+            }}
+          >
+            {translatedName}
+          </Link>
+        </h3>
+
+        {/* Short Description */}
+        <p className="dh-product-description">
+          {language === "ta" && product.tamil_description
+            ? product.tamil_description
+            : product.description ||
+              "Natural herbal wellness formulation for daily vitality and holistic well-being."}
+        </p>
+
+      
+        <div className="uc-price-row-ml">
+          <div className="dh-price">
+            <span className="dh-currency">₹</span>
+            <span className="dh-price-value">
+              {String(product.price || "").replace(/[^0-9.]/g, "")}
+            </span>
+          </div>
+          {/* Top Row: Pack Size Pill Badge (e.g. 100 g / 50 g) & MRP strike-through */}
+
+          <div className="dh-pack-section">
+            {cleanPack && (
+              
+                <span className="dh-pack-size">{cleanPack}</span>
+              
+            )}
+            {product.mrp &&
+              parseFloat(product.mrp) >
+                parseFloat(String(product.price).replace(/[^0-9.]/g, "")) && (
+                <span className="dh-mrp">
+                  {formatCurrency(product.mrp)}
+                </span>
+              )}
+          </div>
+        </div>
+
+        <button
+          type="button"
+          className={`dh-cart-btn ${isAdded ? "is-added" : ""}`}
+          onClick={handleAddToCart}
+          aria-label={t("addToCart")}
+        >
+          {isAdded ? (
+            <Check size={17} />
+          ) : (
+            <ShoppingBag size={17} className="uc-btn-icon" />
+          )}
+          <span className>
+            {isAdded
+              ? language === "ta"
+                ? "சேர்க்கப்பட்டது"
+                : "Added"
+              : language === "ta"
+                ? "கூடையில் சேர்"
+                : t("addToCart") || "Add to Cart"}
+          </span>
+        </button>
+
       </div>
-
-
-      {/* Add to Cart */}
-      <button
-        type="button"
-        className={`dh-cart-btn ${isAdded ? 'added' : ''}`}
-        onClick={handleAddToCart}
-        aria-label={t('addToCart')}
-      >
-        {isAdded ? (
-          <Check size={17} />
-        ) : (
-          <ShoppingBag size={17} />
-        )}
-
-        <span>
-          {isAdded
-            ? (language === 'ta' ? 'சேர்க்கப்பட்டது' : 'Added to Cart')
-            : (language === 'ta'
-                ? 'கூடையில் சேர்'
-                : (t('addToCart') || 'Add to Cart'))}
-        </span>
-      </button>
-
     </div>
-  </article>
-);
+  );
 });
 
 export default ProductCard;
